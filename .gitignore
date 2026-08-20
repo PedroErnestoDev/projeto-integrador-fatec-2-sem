@@ -1,0 +1,15 @@
+/mysql-data/
+.env
+.env.*
+docker-compose.override.yml
+/src/vendor/
+node_modules/
+*.log
+error_log
+php_errors.log
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+ehthumbs.db
+.DS_Store

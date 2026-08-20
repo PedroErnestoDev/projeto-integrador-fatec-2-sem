@@ -1,0 +1,39 @@
+services:
+  # Servidor Apache + PHP
+  web:
+    build: .
+    container_name: pi_2_sem_php_apache
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db
+
+  # Banco de Dados MySQL
+  db:
+    image: mysql:8.0
+    container_name: pi_2_sem_mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: aH0hO2t739b4oo4SCix7
+      MYSQL_DATABASE: playpark
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 06u4380L5dQwWc6wXRFT
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: pi_2_sem_phpmyadmin
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    ports:
+      - "8889:80"
