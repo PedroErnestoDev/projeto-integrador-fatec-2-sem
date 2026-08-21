@@ -1,4 +1,4 @@
-# Projeto Integrador - 2º Semestre (Excelência Operacional - PlayPark)
+# Projeto Integrador - 2º Semestre <br> (Excelência Operacional - PlayPark)
 
 Repositório destinado ao desenvolvimento do Projeto Integrador do 2º semestre do curso de Tecnologia em Desenvolvimento de Software Multiplataforma (DSM) da FATEC Araras.
 
