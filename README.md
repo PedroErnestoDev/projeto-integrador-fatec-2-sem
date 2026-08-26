@@ -55,7 +55,7 @@ Nota: O banco de dados `playpark` será criado automaticamente na primeira execu
 ## Autores
 
 * Pedro Henrique Ernesto de Souza
-* Italo
-* Giovanna
-* Gustavo
-* Ferreti
+* Ítalo Kawamura Gabriel
+* Giovanna Alves Gomes
+* Gustavo Beltrame Vitoriano
+* Gabriel Ferretti
