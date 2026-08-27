@@ -22,10 +22,10 @@ services:
     restart: always
 
     environment:
-      MYSQL_ROOT_PASSWORD: sua_senha
+      MYSQL_ROOT_PASSWORD: OvmO8U2dHm2ywV8pTf8Vo0Bat
       MYSQL_DATABASE: playpark
       MYSQL_USER: admin
-      MYSQL_PASSWORD: sua_senha
+      MYSQL_PASSWORD: 8Z5tHHEF2F4TvEgrxdG1Dx0OK
 
     volumes:
       - ./mysql-data:/var/lib/mysql
