@@ -1,3 +1,14 @@
+<?php
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$erroLogin = $_SESSION['erro_login'] ?? null;
+
+unset($_SESSION['erro_login']);
+
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -57,7 +68,7 @@
                                     required
                                 >
                             </div>
-
+                            <div id="alert-container"></div>
                             <div class="d-grid">
                                 <button
                                     type="submit"
@@ -80,6 +91,29 @@
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
     </script>
+    <script>
+        const erroLogin = <?= json_encode($erroLogin) ?>;
 
+        if (erroLogin) {
+
+            const container = document.getElementById('alert-container');
+
+            container.innerHTML = `
+                <div
+                    class="alert alert-danger alert-dismissible fade show"
+                    role="alert"
+                >
+                    ${erroLogin}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Fechar">
+                    </button>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>
