@@ -541,7 +541,7 @@
         <span>Dashboard</span>
       </a>
 
-      <a href="#OcorrenciasSubmenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="true">
+      <!--<a href="#OcorrenciasSubmenu" class="nav-link" data-bs-toggle="collapse" aria-expanded="true">
         <i class="bi bi-file-earmark-text"></i>
         <span>Ocorrencias</span>
         <i class="bi bi-chevron-down ms-auto" style="font-size:0.75rem;"></i>
@@ -553,11 +553,16 @@
           <a href="#" class="nav-link">Concluídas</a>
           <a href="#" class="nav-link">Todas</a>
         </div>
-      </div>
+      </div>-->
 
-      <a href="#" class="nav-link">
+      <a href="/dashboard/ocorrencias" class="nav-link">
+        <i class="bi bi-file-earmark-text"></i>
+        <span>Ocorrências</span>
+      </a>
+
+      <a href="/dashboard/ocorrencias/criar" class="nav-link">
         <i class="bi bi-plus-square"></i>
-        <span>Nova Ocorrencia</span>
+        <span>Nova Ocorrência</span>
       </a>
 
       <div class="nav-section-label mt-3">Cadastros</div>
@@ -607,7 +612,7 @@
         </button>
         <div>
           <h1>Dashboard</h1>
-          <p class="subtitle">Visão geral das Ocorrencias</p>
+          <p class="subtitle">Visão geral das Ocorrências</p>
         </div>
       </div>
 
@@ -645,7 +650,7 @@
           <div class="stat-card">
             <div class="d-flex align-items-start justify-content-between">
               <div>
-                <div class="stat-label">Ocorrencias Abertas</div>
+                <div class="stat-label">Ocorrências Abertas</div>
                 <div class="stat-value"><?= $estatisticas['abertas']?></div>
               </div>
               <div class="stat-icon icon-purple">
@@ -684,7 +689,7 @@
           <div class="stat-card">
             <div class="d-flex align-items-start justify-content-between">
               <div>
-                <div class="stat-label">Total de Ocorrencias</div>
+                <div class="stat-label">Total de Ocorrências</div>
                 <div class="stat-value"><?= $estatisticas['total']?></div>
               </div>
               <div class="stat-icon icon-blue">
@@ -700,7 +705,7 @@
         <!-- Donut -->
         <div class="col-lg-4">
           <div class="chart-card">
-            <h6 class="card-title">Ocorrencias por Status</h6>
+            <h6 class="card-title">Ocorrências por Status</h6>
             <div class="d-flex align-items-center gap-3">
               <div class="chart-container flex-shrink-0" style="width:160px; height:160px;">
                 <canvas id="statusChart"></canvas>
@@ -726,7 +731,7 @@
         <!-- Bar - Setor -->
         <div class="col-lg-4">
           <div class="chart-card">
-            <h6 class="card-title">Ocorrencias por Prioridade</h6>
+            <h6 class="card-title">Ocorrências por Prioridade</h6>
             <div class="chart-container">
               <canvas id="setorChart"></canvas>
             </div>
@@ -736,7 +741,7 @@
         <!-- Horizontal Bar - Brinquedo -->
         <div class="col-lg-4">
           <div class="chart-card">
-            <h6 class="card-title">Ocorrencias por Brinquedo (Top 5)</h6>
+            <h6 class="card-title">Ocorrências por Brinquedo (Top 5)</h6>
             <div class="chart-container">
               <canvas id="brinquedoChart"></canvas>
             </div>
@@ -747,7 +752,7 @@
       <!-- Recent Table -->
       <div class="table-card">
         <div class="card-header-custom">
-          <h5>Ocorrencias Recentes</h5>
+          <h5>Ocorrências Recentes</h5>
         </div>
 
         <div class="table-responsive">
@@ -799,7 +804,7 @@
 
                       <td class="text-center">
                           <a
-                              href="/ocorrencias/<?= $ocorrencia['id_ocorrencia'] ?>"
+                              href="/dashboard/ocorrencias/detalhes/<?= $ocorrencia['id_ocorrencia'] ?>"
                               class="btn-view"
                               title="Visualizar"
                           >
@@ -813,8 +818,8 @@
         </div>
 
         <div class="table-footer">
-          <a href="#" class="btn btn-outline-primary btn-sm px-4">
-            Ver todas as Ocorrencias <i class="bi bi-arrow-right ms-1"></i>
+          <a href="/dashboard/ocorrencias" class="btn btn-outline-primary btn-sm px-4">
+            Ver todas as Ocorrências <i class="bi bi-arrow-right ms-1"></i>
           </a>
         </div>
       </div>
@@ -872,7 +877,7 @@
       }
     });
 
-    // Bar - Setor
+    // Bar - Prioridade
     new Chart(document.getElementById('setorChart'), {
       type: 'bar',
       data: {
@@ -880,7 +885,7 @@
         datasets: [{
           data: [<?= $estatisticaPrioridade['alta']?>, <?= $estatisticaPrioridade['media']?>, <?= $estatisticaPrioridade['baixa']?>],
           backgroundColor: ['#f33737', '#f59e0b', '#10b981'],
-          borderRadius: 6,
+          borderRadius: 0,
           borderSkipped: false,
           barPercentage: 0.90
         }]
@@ -929,7 +934,7 @@
                 '#ef4444'
             ],
 
-            borderRadius: 5,
+            borderRadius: 0,
             borderSkipped: false,
             barPercentage: 0.7
         }]
