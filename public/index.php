@@ -14,6 +14,9 @@ require_once __DIR__ . '/../app/Controllers/ColaboradorController.php';
 require_once __DIR__ . '/../app/Controllers/BrinquedoController.php';
 require_once __DIR__ . '/../app/Controllers/OcorrenciaController.php';
 require_once __DIR__ . '/../app/Controllers/DashboardController.php';
+require_once __DIR__ . '/../app/Controllers/SetorController.php';
+
+require_once __DIR__ . '/../app/Core/Auth.php';
 
 
 $db = new DB();
@@ -26,6 +29,7 @@ $colaboradorController = new ColaboradorController($pdo);
 $brinquedoController = new BrinquedoController($pdo);
 $ocorrenciaController = new OcorrenciaController($pdo);
 $dashboardController = new DashboardController($pdo);
+$setorController = new SetorController($pdo);
 
 $router->get('/', function () {
 
@@ -45,6 +49,12 @@ $router->get('/login', function () {
 $router->post('/login', function () use ($usuarioController) {
 
     $usuarioController->login();
+
+});
+
+$router->post('/logout', function (){
+
+    Auth::deslogar();
 
 });
 
@@ -107,6 +117,110 @@ $router->delete('/dashboard/ocorrencias/excluir/{id}', function (int $id) use ($
 
 });
 
+$router->post('/dashboard/ocorrencias/encaminhar/{id}', function (int $id) use ($ocorrenciaController) {
+
+    $ocorrenciaController->encaminhar($id);
+
+});
+
+$router->get('/dashboard/brinquedos', function () use ($brinquedoController) {
+
+    $brinquedoController->listarParaPagina();
+
+});
+
+$router->get('/dashboard/colaboradores', function () use ($colaboradorController) {
+
+    $colaboradorController->listarParaPagina();
+
+});
+
+$router->get('/dashboard/setores', function () use ($setorController) {
+
+    $setorController->listarParaPagina();
+
+});
+
+$router->get('/dashboard/usuarios', function () use ($usuarioController) {
+
+    $usuarioController->listarParaPagina();
+
+});
+
+
+
+$router->post('/dashboard/usuarios/criar', function () use ($usuarioController) {
+
+    $usuarioController->criar();
+
+});
+
+$router->post('/dashboard/usuarios/editar', function () use ($usuarioController) {
+
+    $usuarioController->atualizar();
+
+});
+
+$router->post('/dashboard/usuarios/excluir', function () use ($usuarioController) {
+
+    $usuarioController->excluir();
+
+});
+
+$router->post('/dashboard/setores/criar', function () use ($setorController) {
+
+    $setorController->criar();
+
+});
+
+$router->post('/dashboard/setores/editar', function () use ($setorController) {
+
+    $setorController->atualizar();
+
+});
+
+$router->post('/dashboard/setores/excluir', function () use ($setorController) {
+
+    $setorController->deletar();
+
+});
+
+$router->post('/dashboard/colaboradores/criar', function () use ($colaboradorController) {
+
+    $colaboradorController->criar();
+
+});
+
+$router->post('/dashboard/colaboradores/editar', function () use ($colaboradorController) {
+
+    $colaboradorController->editar();
+
+});
+
+$router->post('/dashboard/colaboradores/excluir', function () use ($colaboradorController) {
+
+    $colaboradorController->excluir();
+
+});
+
+$router->post('/dashboard/brinquedos/criar', function () use ($brinquedoController) {
+
+    $brinquedoController->criar();
+
+});
+
+$router->post('/dashboard/brinquedos/editar', function () use ($brinquedoController) {
+
+    $brinquedoController->editar();
+
+});
+
+$router->post('/dashboard/brinquedos/excluir', function () use ($brinquedoController) {
+
+    $brinquedoController->excluir();
+
+});
+
 
 $router->get('/api/colaboradores', function () use ($colaboradorController) {
 
@@ -118,6 +232,12 @@ $router->get('/api/colaboradores', function () use ($colaboradorController) {
 $router->get('/api/brinquedos', function () use ($brinquedoController) {
 
     $brinquedoController->listar();
+
+});
+
+$router->get('/api/setores', function () use ($setorController) {
+
+    $setorController->listar();
 
 });
 

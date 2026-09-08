@@ -13,7 +13,7 @@
         }
 
         public function index(): void {
-            Auth::exigirPerfil(Perfil::ADMIN);
+            Auth::exigirPerfil(Perfil::ADMIN, Perfil::SUPERVISOR);
 
             $ocorrencias = $this->ocorrencia->listarCincoRecentes();
 

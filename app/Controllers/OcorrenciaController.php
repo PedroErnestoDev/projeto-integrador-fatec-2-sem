@@ -74,7 +74,7 @@
 
 
             public function listarTodas(): void {
-                Auth::exigirPerfil(Perfil::ADMIN);
+                Auth::exigirPerfil(Perfil::ADMIN, Perfil::SUPERVISOR);
 
                 $ocorrencias = $this->ocorrencia->listarTodas();
 
@@ -82,7 +82,7 @@
             }
 
             public function detalhes(int $id): void{
-                Auth::exigirPerfil(Perfil::ADMIN);
+                Auth::exigirPerfil(Perfil::ADMIN, Perfil::SUPERVISOR);
 
                 if ($id <= 0) {
                     http_response_code(400);
@@ -102,7 +102,7 @@
             }
 
             public function editar(int $id): void {
-                Auth::exigirPerfil(Perfil::ADMIN);
+                Auth::exigirPerfil(Perfil::ADMIN, Perfil::SUPERVISOR);
 
                 if ($id <= 0) {
                     http_response_code(400);
@@ -123,7 +123,7 @@
 
             public function atualizar(int $id): void {
                 
-                Auth::exigirPerfil(Perfil::ADMIN);
+                Auth::exigirPerfil(Perfil::ADMIN, Perfil::SUPERVISOR);
 
                 if ($id <= 0) {
                     http_response_code(400);
@@ -227,7 +227,7 @@
             }
 
             public function deletar(int $id): void{
-                    Auth::exigirPerfil(Perfil::ADMIN);
+                    Auth::exigirPerfil(Perfil::ADMIN, Perfil::SUPERVISOR);
 
                     if ($id <= 0) {
                         http_response_code(400);
@@ -257,10 +257,49 @@
 
         public function criarFormularioAdmin(): void
         {
-            Auth::exigirPerfil(Perfil::ADMIN);
+            Auth::exigirPerfil(Perfil::ADMIN, Perfil::SUPERVISOR);
 
             require_once __DIR__ .
                 '/../Views/dashboard/ocorrencias/criar.php';
         }
+
+        public function encaminhar(int $id): void{
+            Auth::exigirPerfil(Perfil::ADMIN, Perfil::SUPERVISOR);
+
+           if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                header('Location: /ocorrencias');
+                exit;
+            }
+
+            $id = (int) ($_POST['id_ocorrencia'] ?? 0);
+            $fkSetor = (int) ($_POST['fk_setor'] ?? 0);
+
+
+            if ($id <= 0 || $fkSetor <= 0) {
+                $_SESSION['erro'] = 'Ocorrência ou setor inválido.';
+
+                header('Location: /ocorrencias');
+                exit;
+            }
+
+
+            $sucesso = $this->ocorrencia->encaminhar(
+                $id,
+                $fkSetor
+            );
+
+
+            if ($sucesso) {
+                $_SESSION['sucesso'] = 'Ocorrência encaminhada com sucesso.';
+            } else {
+                $_SESSION['erro'] = 'Erro ao encaminhar ocorrência.';
+            }
+
+
+            header('Location: /dashboard/ocorrencias');
+            exit;
+        }
+
+        
     }
 ?>

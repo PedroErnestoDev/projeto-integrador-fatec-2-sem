@@ -556,25 +556,72 @@
 });
 const params = new URLSearchParams(window.location.search);
 
-    if (params.get('sucesso') === '1') {
+const sucesso = params.get('sucesso');
 
-        const alertContainer = document.getElementById('alert-container');
+if (sucesso === '1') {
 
-        alertContainer.innerHTML = `
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Sucesso!</strong> Ocorrência cadastrada com sucesso.
-                
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"
-                        aria-label="Fechar">
-                </button>
+    const modalHTML = `
+        <div class="modal fade" id="sucessoModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Ocorrência enviada
+                        </h5>
+
+                        <button 
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                        </button>
+                    </div>
+
+                    <div class="modal-body text-center">
+
+                        <i class="bi bi-check-circle-fill text-success"
+                           style="font-size: 60px;">
+                        </i>
+
+                        <h5 class="mt-3">
+                            Ocorrência registrada com sucesso!
+                        </h5>
+
+                        <p class="text-muted">
+                            A ocorrência foi enviada para análise.
+                        </p>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            data-bs-dismiss="modal">
+                            Entendido
+                        </button>
+                    </div>
+
+                </div>
             </div>
-        `;
+        </div>
+    `;
 
-        // Remove o parâmetro da URL
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    const modalElement = document.getElementById('sucessoModal');
+
+    const modal = new bootstrap.Modal(modalElement);
+
+    modal.show();
+
+    // Remove ?sucesso=1 da URL depois de ler
+    window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+    );
+}
   </script>
   
 </body>

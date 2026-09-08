@@ -1,4 +1,17 @@
 <?php
+
+$sidebarProps = [
+    'active' => 'ocorrencias',
+];
+
+$topbarProps = [
+    'title'        => 'Ocorrências',
+    'subtitle'     => 'Listagem de detalhes individuais',
+    'userName'     => 'Administrador',
+    'userRole'     => 'Gerência',
+    'userInitials' => 'AG',
+];
+
 $status = strtolower(trim($ocorrencia['status'] ?? ''));
 $prioridade = strtolower(trim($ocorrencia['prioridade'] ?? ''));
 
@@ -1080,15 +1093,13 @@ function formatarData($data): string
 
 
         .text-content {
-
-            color:
-                #475569;
-
-            font-size:
-                .86rem;
-
-            line-height:
-                1.7;
+            color:#475569;
+            font-size:.86rem;
+            line-height:1.7;
+            height: 21vh;
+            white-space: normal;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
 
@@ -1514,276 +1525,15 @@ function formatarData($data): string
     onclick="toggleSidebar()"
 ></div>
 
+<?php require_once __DIR__ . '/../../components/sidebar.php'; ?>
 
 <!-- =========================================================
-     SIDEBAR
-========================================================= -->
-
-<aside
-    class="sidebar"
-    id="sidebar"
->
-
-    <div class="sidebar-brand">
-
-        <div class="logo-text">
-
-            PLAY <span>PARK</span>
-
-        </div>
-
-        <div class="logo-sub">
-
-            Excelência Operacional
-
-        </div>
-
-    </div>
-
-
-    <nav class="sidebar-nav">
-
-        <div class="nav-section-label">
-            Principal
-        </div>
-
-
-        <a
-            href="/dashboard"
-            class="nav-link"
-        >
-
-            <i class="bi bi-house-door-fill"></i>
-
-            <span>
-                Dashboard
-            </span>
-
-        </a>
-
-
-        <a
-            href="/dashboard/ocorrencias"
-            class="nav-link active"
-        >
-
-            <i class="bi bi-file-earmark-text"></i>
-
-            <span>
-                Ocorrências
-            </span>
-
-        </a>
-
-
-        <a
-            href="/dashboard/ocorrencias/criar"
-            class="nav-link"
-        >
-
-            <i class="bi bi-plus-square"></i>
-
-            <span>
-                Nova Ocorrência
-            </span>
-
-        </a>
-
-
-        <div class="nav-section-label mt-3">
-            Cadastros
-        </div>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-controller"></i>
-
-            <span>
-                Brinquedos
-            </span>
-
-        </a>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-person-badge"></i>
-
-            <span>
-                Colaboradores
-            </span>
-
-        </a>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-building"></i>
-
-            <span>
-                Setores
-            </span>
-
-        </a>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-people"></i>
-
-            <span>
-                Usuários
-            </span>
-
-        </a>
-
-
-        <div class="nav-section-label mt-3">
-            Sistema
-        </div>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-bar-chart-line"></i>
-
-            <span>
-                Relatórios
-            </span>
-
-        </a>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-gear"></i>
-
-            <span>
-                Configurações
-            </span>
-
-        </a>
-
-    </nav>
-
-
-    <div class="sidebar-footer">
-
-        <a
-            href="#"
-            class="nav-link text-danger"
-        >
-
-            <i class="bi bi-box-arrow-right"></i>
-
-            <span>
-                Sair
-            </span>
-
-        </a>
-
-    </div>
-
-</aside>
-
-
-<!-- =========================================================
-     MAIN
+MAIN
 ========================================================= -->
 
 <div class="main-content">
-
-
-    <!-- TOPBAR -->
-
-    <header class="topbar">
-
-        <div class="d-flex align-items-center gap-3">
-
-            <button
-                class="sidebar-toggle"
-                onclick="toggleSidebar()"
-            >
-
-                <i class="bi bi-list"></i>
-
-            </button>
-
-
-            <div>
-
-                <h1>
-                    Detalhes da Ocorrência
-                </h1>
-
-                <p class="subtitle">
-                    Visualização e gerenciamento da ocorrência
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="d-flex align-items-center gap-2">
-
-            <button
-                class="btn btn-light border"
-                style="width:40px;height:40px;"
-            >
-
-                <i class="bi bi-bell"></i>
-
-            </button>
-
-
-            <div class="user-dropdown">
-
-                <div class="user-avatar">
-                    AG
-                </div>
-
-                <div class="user-info d-none d-sm-block">
-
-                    <div class="name">
-                        Administrador
-                    </div>
-
-                    <div class="role">
-                        Gerência
-                    </div>
-
-                </div>
-
-                <i
-                    class="bi bi-chevron-down text-muted"
-                    style="font-size:.7rem;"
-                ></i>
-
-            </div>
-
-        </div>
-
-    </header>
+    
+    <?php require_once __DIR__ . '/../../components/topbar.php'; ?>
 
 
     <!-- CONTENT -->
@@ -2066,7 +1816,7 @@ function formatarData($data): string
                         <i class="bi bi-check2-circle"></i>
 
                         <h5>
-                            Solução da ocorrência
+                            Observação/Solução da ocorrência
                         </h5>
 
                     </div>
@@ -2302,6 +2052,20 @@ function formatarData($data): string
 
 
                         <div class="detail-row">
+                        
+                            <span class="label">
+                                Setor Atual
+                            </span>
+                        
+                            <span class="value">
+                        
+                                <?=$ocorrencia['setor'] ?? null ?>
+                        
+                            </span>
+                        
+                        </div>
+                        
+                        <div class="detail-row">
 
                             <span class="label">
                                 Conclusão
@@ -2318,6 +2082,7 @@ function formatarData($data): string
                             </span>
 
                         </div>
+
 
 
                     </div>
@@ -2480,7 +2245,7 @@ function formatarData($data): string
 
             <form
                 method="POST"
-                action="/dashboard/ocorrencias/encaminhar"
+                action="/dashboard/ocorrencias/encaminhar/<?= (int)$ocorrencia['id_ocorrencia'] ?>"
             >
 
                 <div class="modal-body">
@@ -2512,74 +2277,14 @@ function formatarData($data): string
                             name="fk_setor"
                             class="form-select"
                             required
+                            id="fk_setor"
                         >
-
-                            <option value="">
-                                Selecione o setor
-                            </option>
-
-                            <!--
-                                Substitua pelos setores
-                                vindos do banco.
-                            -->
-
-                            <?php if (!empty($setores)): ?>
-
-                                <?php foreach (
-                                    $setores as $setor
-                                ): ?>
-
-                                    <option
-                                        value="<?= (int)
-                                            $setor[
-                                                'id_setor'
-                                            ] ?>"
-                                    >
-
-                                        <?= htmlspecialchars(
-                                            $setor[
-                                                'nome_setor'
-                                            ]
-                                        ) ?>
-
-                                    </option>
-
-                                <?php endforeach; ?>
-
-                            <?php endif; ?>
 
                         </select>
 
                     </div>
 
-
-                    <div>
-
-                        <label
-                            class="form-label"
-                            style="
-                                font-size:.78rem;
-                                font-weight:600;
-                            "
-                        >
-
-                            Observação
-
-                        </label>
-
-
-                        <textarea
-                            name="observacao"
-                            class="form-control"
-                            rows="4"
-                            placeholder="Descreva o motivo do encaminhamento..."
-                        ></textarea>
-
-                    </div>
-
                 </div>
-
-
                 <div class="modal-footer">
 
                     <button
@@ -2648,6 +2353,55 @@ function excluirOcorrencia(id) {
         alert('Erro ao excluir a ocorrência.');
     });
 }
+
+</script>
+
+<script>
+
+async function carregarSetores() {
+
+    const select = document.getElementById('fk_setor');
+
+    try {
+
+        const response = await fetch('/api/setores');
+
+        if (!response.ok) {
+            throw new Error('Erro HTTP: ' + response.status);
+        }
+
+        const resultado = await response.json();
+
+        select.innerHTML = `
+            <option value="">
+                Selecione o setor
+            </option>
+        `;
+
+        resultado.forEach(setor => {
+
+            const option = document.createElement('option');
+
+            option.value = setor.id_setor;
+            option.textContent = setor.nome_setor;
+
+            select.appendChild(option);
+        });
+
+    } catch (erro) {
+
+        console.error('Erro ao carregar setores:', erro);
+
+        select.innerHTML = `
+            <option value="">
+                Erro ao carregar setores
+            </option>
+        `;
+    }
+}
+
+carregarSetores();
+
 </script>
 
 <script>

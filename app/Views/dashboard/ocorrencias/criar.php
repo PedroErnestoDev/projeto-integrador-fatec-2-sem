@@ -3,6 +3,19 @@
 // $colaboradores
 // $brinquedos
 // $prioridades
+
+$sidebarProps = [
+    'active' => 'nova-ocorrencia',
+];
+
+$topbarProps = [
+    'title'        => 'Nova Ocorrência',
+    'subtitle'     => 'Criação de nova ocorrência',
+    'userName'     => 'Administrador',
+    'userRole'     => 'Gerência',
+    'userInitials' => 'AG',
+];
+
 ?>
 
 <!DOCTYPE html>
@@ -1239,277 +1252,16 @@
      SIDEBAR
 ===================================================== -->
 
-<aside
-    class="sidebar"
-    id="sidebar"
->
-
-    <div class="sidebar-brand">
-
-        <div class="logo-text">
-
-            PLAY <span>PARK</span>
-
-        </div>
-
-        <div class="logo-sub">
-
-            Excelência Operacional
-
-        </div>
-
-    </div>
-
-
-    <nav class="sidebar-nav">
-
-        <div class="nav-section-label">
-            Principal
-        </div>
-
-
-        <a
-            href="/dashboard"
-            class="nav-link"
-        >
-
-            <i class="bi bi-house-door-fill"></i>
-
-            <span>
-                Dashboard
-            </span>
-
-        </a>
-
-
-        <a
-            href="/dashboard/ocorrencias"
-            class="nav-link"
-        >
-
-            <i class="bi bi-file-earmark-text"></i>
-
-            <span>
-                Ocorrências
-            </span>
-
-        </a>
-
-
-        <a
-            href="/dashboard/ocorrencias/criar"
-            class="nav-link active"
-        >
-
-            <i class="bi bi-plus-square"></i>
-
-            <span>
-                Nova Ocorrência
-            </span>
-
-        </a>
-
-
-        <div class="nav-section-label mt-3">
-            Cadastros
-        </div>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-controller"></i>
-
-            <span>
-                Brinquedos
-            </span>
-
-        </a>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-person-badge"></i>
-
-            <span>
-                Colaboradores
-            </span>
-
-        </a>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-building"></i>
-
-            <span>
-                Setores
-            </span>
-
-        </a>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-people"></i>
-
-            <span>
-                Usuários
-            </span>
-
-        </a>
-
-
-        <div class="nav-section-label mt-3">
-            Sistema
-        </div>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-bar-chart-line"></i>
-
-            <span>
-                Relatórios
-            </span>
-
-        </a>
-
-
-        <a
-            href="#"
-            class="nav-link"
-        >
-
-            <i class="bi bi-gear"></i>
-
-            <span>
-                Configurações
-            </span>
-
-        </a>
-
-    </nav>
-
-
-    <div class="sidebar-footer">
-
-        <a
-            href="#"
-            class="nav-link text-danger"
-        >
-
-            <i class="bi bi-box-arrow-right"></i>
-
-            <span>
-                Sair
-            </span>
-
-        </a>
-
-    </div>
-
-</aside>
-
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
+<?php require_once __DIR__ . '/../../components/sidebar.php'; ?>
 
 <div class="main-content">
-
-
+    
+    
     <!-- =================================================
-         TOPBAR
+    TOPBAR
     ================================================= -->
-
-    <header class="topbar">
-
-        <div class="d-flex align-items-center gap-3">
-
-            <button
-                type="button"
-                class="sidebar-toggle"
-                onclick="toggleSidebar()"
-            >
-
-                <i class="bi bi-list"></i>
-
-            </button>
-
-
-            <div>
-
-                <h1>
-                    Nova Ocorrência
-                </h1>
-
-                <p class="subtitle">
-                    Registro de uma nova ocorrência operacional
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="d-flex align-items-center gap-2">
-
-            <button
-                type="button"
-                class="btn btn-light border"
-                style="width:40px;height:40px;"
-            >
-
-                <i class="bi bi-bell"></i>
-
-            </button>
-
-
-            <div class="user-dropdown">
-
-                <div class="user-avatar">
-                    AG
-                </div>
-
-                <div class="user-info d-none d-sm-block">
-
-                    <div class="name">
-                        Administrador
-                    </div>
-
-                    <div class="role">
-                        Gerência
-                    </div>
-
-                </div>
-
-
-                <i
-                    class="bi bi-chevron-down text-muted"
-                    style="font-size:.7rem;"
-                ></i>
-
-            </div>
-
-        </div>
-
-    </header>
-
+    
+    <?php require_once __DIR__ . '/../../components/topbar.php'; ?>
 
     <!-- =================================================
          CONTENT

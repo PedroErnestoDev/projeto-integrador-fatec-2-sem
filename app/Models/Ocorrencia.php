@@ -14,8 +14,8 @@
             int $fkPrioridade,
             int $fkUsuario,
         ): bool {
-            $sql = "INSERT INTO ocorrencia (fk_colaborador, fk_brinquedo, ordem_producao, descricao_ocorrencia, fk_prioridade, fk_status, fk_usuario) 
-                VALUES (:fk_colaborador, :fk_brinquedo, :ordem_producao, :descricao_ocorrencia, :fk_prioridade, 1, :fk_usuario)
+            $sql = "INSERT INTO ocorrencia (fk_colaborador, fk_brinquedo, ordem_producao, descricao_ocorrencia, fk_prioridade, fk_status, fk_usuario, fk_setor) 
+                VALUES (:fk_colaborador, :fk_brinquedo, :ordem_producao, :descricao_ocorrencia, :fk_prioridade, 1, :fk_usuario, 1)
             ";
 
             $stmt = $this->pdo->prepare($sql);
@@ -31,8 +31,8 @@
         }
 
         public function listarCincoRecentes(): array{
-            $sql = "SELECT o.id_ocorrencia, o.criado_em, c.nome_colaborador AS colaborador, b.nome_brinquedo AS brinquedo, p.nome_prioridade AS prioridade, s.nome_status AS status
-            FROM ocorrencia o
+            $sql = "SELECT o.id_ocorrencia, o.criado_em, c.nome_colaborador AS colaborador, b.nome_brinquedo AS brinquedo, p.nome_prioridade AS prioridade, s.nome_status AS status, o.fk_setor,
+            se.nome_setor AS setor FROM ocorrencia o
 
             INNER JOIN colaborador c
                 ON c.id_colaborador = o.fk_colaborador
@@ -45,6 +45,9 @@
 
             INNER JOIN status s
                 ON s.id_status = o.fk_status
+            
+            LEFT JOIN setor se
+                ON se.id_setor = o.fk_setor
 
             ORDER BY
                 o.criado_em DESC,
@@ -177,7 +180,9 @@
                         u.login_usuario AS usuario,
 
                         o.criado_em,
-                        o.atualizado_em
+                        o.atualizado_em,
+                        o.fk_setor,
+                        se.nome_setor AS setor
 
                     FROM ocorrencia o
 
@@ -195,6 +200,9 @@
 
                     INNER JOIN usuario u
                         ON u.id_usuario = o.fk_usuario
+                    
+                    LEFT JOIN setor se
+                        ON se.id_setor = o.fk_setor
 
                     ORDER BY
                         o.criado_em DESC,
@@ -234,7 +242,9 @@
                             u.login_usuario AS usuario,
 
                             o.criado_em,
-                            o.atualizado_em
+                            o.atualizado_em,
+                            o.fk_setor,
+                            se.nome_setor AS setor
 
                         FROM ocorrencia o
 
@@ -252,6 +262,9 @@
 
                         INNER JOIN usuario u
                             ON u.id_usuario = o.fk_usuario
+
+                        LEFT JOIN setor se
+                        ON se.id_setor = o.fk_setor
 
                         WHERE o.id_ocorrencia = :id
 
@@ -363,6 +376,20 @@
                     return $stmt->execute([
                         ':id' => $id
                     ]);
+                }
+
+                public function encaminhar(
+                    int $id,
+                    int $fk_setor
+                ) : bool{
+                     $sql = "UPDATE ocorrencia SET fk_setor = :fk_setor WHERE id_ocorrencia = :id";
+
+                     $stmt = $this->pdo->prepare($sql);
+
+                     return $stmt->execute([
+                        ':fk_setor'=> $fk_setor,
+                        ':id'=> $id
+                     ]);
                 }
     }
 ?>

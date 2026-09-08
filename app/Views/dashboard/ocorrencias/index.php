@@ -1,3 +1,17 @@
+<?php
+$sidebarProps = [
+    'active' => 'ocorrencias',
+];
+
+$topbarProps = [
+    'title'        => 'Ocorrências',
+    'subtitle'     => 'Listagem de todas as Ocorrências',
+    'userName'     => 'Administrador',
+    'userRole'     => 'Gerência',
+    'userInitials' => 'AG',
+];
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -716,157 +730,7 @@
          SIDEBAR
     ====================================================== -->
 
-    <aside
-        class="sidebar"
-        id="sidebar">
-
-        <div class="sidebar-brand">
-
-            <div class="logo-text">
-                PLAY <span>PARK</span>
-            </div>
-
-            <div class="logo-sub">
-                Excelência Operacional
-            </div>
-
-        </div>
-
-
-        <nav class="sidebar-nav">
-
-            <div class="nav-section-label">
-                Principal
-            </div>
-
-
-            <a href="/dashboard" class="nav-link">
-
-                <i class="bi bi-house-door-fill"></i>
-
-                <span>
-                    Dashboard
-                </span>
-
-            </a>
-
-
-            <a href="#" class="nav-link active">
-
-                <i class="bi bi-file-earmark-text"></i>
-
-                <span>
-                    Ocorrências
-                </span>
-
-            </a>
-
-
-            <a href="/dashboard/ocorrencias/criar" class="nav-link">
-
-                <i class="bi bi-plus-square"></i>
-
-                <span>
-                    Nova Ocorrência
-                </span>
-
-            </a>
-
-
-            <div class="nav-section-label mt-3">
-                Cadastros
-            </div>
-
-
-            <a href="#" class="nav-link">
-
-                <i class="bi bi-controller"></i>
-
-                <span>
-                    Brinquedos
-                </span>
-
-            </a>
-
-
-            <a href="#" class="nav-link">
-
-                <i class="bi bi-person-badge"></i>
-
-                <span>
-                    Colaboradores
-                </span>
-
-            </a>
-
-
-            <a href="#" class="nav-link">
-
-                <i class="bi bi-building"></i>
-
-                <span>
-                    Setores
-                </span>
-
-            </a>
-
-
-            <a href="#" class="nav-link">
-
-                <i class="bi bi-people"></i>
-
-                <span>
-                    Usuários
-                </span>
-
-            </a>
-
-
-            <div class="nav-section-label mt-3">
-                Sistema
-            </div>
-
-
-            <a href="#" class="nav-link">
-
-                <i class="bi bi-bar-chart-line"></i>
-
-                <span>
-                    Relatórios
-                </span>
-
-            </a>
-
-
-            <a href="#" class="nav-link">
-
-                <i class="bi bi-gear"></i>
-
-                <span>
-                    Configurações
-                </span>
-
-            </a>
-
-        </nav>
-
-
-        <div class="sidebar-footer">
-
-            <a href="#" class="nav-link text-danger">
-
-                <i class="bi bi-box-arrow-right"></i>
-
-                <span>
-                    Sair
-                </span>
-
-            </a>
-
-        </div>
-
-    </aside>
-
+    <?php require_once __DIR__ . '/../../components/sidebar.php'; ?>
 
     <!-- =====================================================
          MAIN
@@ -874,146 +738,8 @@
 
     <div class="main-content">
 
-
-        <!-- =================================================
-             TOPBAR
-        ================================================== -->
-
-        <header class="topbar">
-
-            <div class="d-flex align-items-center gap-3">
-
-                <button
-                    class="sidebar-toggle"
-                    onclick="toggleSidebar()">
-
-                    <i class="bi bi-list"></i>
-
-                </button>
-
-
-                <div>
-
-                    <h1>
-                        Ocorrências
-                    </h1>
-
-                    <p class="subtitle">
-                        Gerenciamento de todas as ocorrências
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="d-flex align-items-center gap-2">
-
-                <button
-                    class="notif-btn"
-                    title="Notificações">
-
-                    <i class="bi bi-bell"></i>
-
-                    <span class="badge bg-danger rounded-pill">
-                        3
-                    </span>
-
-                </button>
-
-
-                <div class="dropdown">
-
-                    <div
-                        class="user-dropdown"
-                        data-bs-toggle="dropdown">
-
-                        <div class="user-avatar">
-                            AG
-                        </div>
-
-                        <div class="user-info d-none d-sm-block">
-
-                            <div class="name">
-                                Administrador
-                            </div>
-
-                            <div class="role">
-                                Gerência
-                            </div>
-
-                        </div>
-
-                        <i
-                            class="bi bi-chevron-down text-muted"
-                            style="font-size:0.7rem;">
-                        </i>
-
-                    </div>
-
-
-                    <ul
-                        class="dropdown-menu dropdown-menu-end shadow-sm border-0"
-                        style="min-width:180px;">
-
-                        <li>
-
-                            <a
-                                class="dropdown-item small"
-                                href="#">
-
-                                <i class="bi bi-person me-2"></i>
-
-                                Meu Perfil
-
-                            </a>
-
-                        </li>
-
-
-                        <li>
-
-                            <a
-                                class="dropdown-item small"
-                                href="#">
-
-                                <i class="bi bi-gear me-2"></i>
-
-                                Configurações
-
-                            </a>
-
-                        </li>
-
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-
-                        <li>
-
-                            <a
-                                class="dropdown-item small text-danger"
-                                href="#">
-
-                                <i
-                                    class="bi bi-box-arrow-right me-2">
-                                </i>
-
-                                Sair
-
-                            </a>
-
-                        </li>
-
-                    </ul>
-
-                </div>
-
-            </div>
-
-        </header>
+        
+        <?php require_once __DIR__ . '/../../components/topbar.php'; ?>
 
 
         <!-- =================================================
@@ -1051,7 +777,7 @@
 
 
                         <a
-                            href="#"
+                            href="/dashboard/ocorrencias/criar"
                             class="btn btn-primary btn-sm">
 
                             <i class="bi bi-plus-lg me-1"></i>
@@ -1108,12 +834,9 @@
                                 </th>
 
                                 <th>
-                                    Usuário
+                                    Setor Atual
                                 </th>
 
-                                <th>
-                                    Criado em
-                                </th>
 
                                 <th class="text-center">
                                     Ações
@@ -1294,30 +1017,10 @@
                                         <td>
 
                                             <?= htmlspecialchars(
-                                                $ocorrencia['usuario'] ?? '-'
+                                                $ocorrencia['setor'] ?? '-'
                                             ) ?>
 
                                         </td>
-
-
-                                        <!-- CRIADO EM -->
-
-                                        <td>
-
-                                            <?= !empty(
-                                                $ocorrencia['criado_em']
-                                            )
-                                                ? date(
-                                                    'd/m/Y H:i',
-                                                    strtotime(
-                                                        $ocorrencia['criado_em']
-                                                    )
-                                                )
-                                                : '-'
-                                            ?>
-
-                                        </td>
-
 
                                         <!-- AÇÕES -->
 
