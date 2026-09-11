@@ -87,6 +87,16 @@ $userInitials = $topbarProps['userInitials'] ?? 'U';
     color: #64748b;
 }
 
+.logout-button{
+    background-color: red; 
+    color: white;
+}
+
+.logout-button:hover{
+    background-color: rgb(142, 48, 48);
+    color: white;
+}
+
 @media (max-width: 575.98px) {
     .topbar {
         padding: .8rem 1rem;
@@ -110,18 +120,13 @@ $userInitials = $topbarProps['userInitials'] ?? 'U';
         </div>
     </div>
 
-    <div class="d-flex align-items-center gap-2">
-
-        <div class="user-dropdown">
-            <div class="user-avatar">
-                <?= htmlspecialchars($userInitials) ?>
-            </div>
-
-            <div class="user-info d-none d-sm-block">
-                <div class="name"><?= htmlspecialchars($userName) ?></div>
-                <div class="role"><?= htmlspecialchars($userRole) ?></div>
-            </div>
-        </div>
+    <div class="sidebar-footer">
+        <form action="/logout" method="POST">
+            <button type="submit" class="logout-button">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sair</span>
+            </button>
+        </form>
     </div>
 
 </header>

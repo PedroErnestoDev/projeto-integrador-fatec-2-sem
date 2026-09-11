@@ -188,10 +188,7 @@ $active = $sidebarProps['active'] ?? 'dashboard';
 
     <div class="sidebar-brand">
         <div class="logo-text">
-            PLAY <span>PARK</span>
-        </div>
-        <div class="logo-sub">
-            Excelência Operacional
+            <img src="/assets/logo-play-park.png" alt="" style="height: 100%; width: 100%;">
         </div>
     </div>
 
@@ -247,17 +244,6 @@ $active = $sidebarProps['active'] ?? 'dashboard';
             <i class="bi bi-gear"></i>
             <span>Configurações</span>
         </a>
-
-        <div class="sidebar-footer">
-    
-            <form action="/logout" method="POST">
-                <button type="submit" class="logout-button">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Sair</span>
-                </button>
-            </form>
-    
-        </div>
     </nav>
 </aside>
 

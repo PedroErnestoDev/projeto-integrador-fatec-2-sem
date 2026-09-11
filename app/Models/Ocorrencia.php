@@ -15,7 +15,7 @@
             int $fkUsuario,
         ): bool {
             $sql = "INSERT INTO ocorrencia (fk_colaborador, fk_brinquedo, ordem_producao, descricao_ocorrencia, fk_prioridade, fk_status, fk_usuario, fk_setor) 
-                VALUES (:fk_colaborador, :fk_brinquedo, :ordem_producao, :descricao_ocorrencia, :fk_prioridade, 1, :fk_usuario, 1)
+                VALUES (:fk_colaborador, :fk_brinquedo, :ordem_producao, :descricao_ocorrencia, :fk_prioridade, 1, :fk_usuario, 2)
             ";
 
             $stmt = $this->pdo->prepare($sql);
