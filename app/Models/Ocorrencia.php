@@ -391,5 +391,15 @@
                         ':id'=> $id
                      ]);
                 }
+
+                public function listarHistorico(): array {
+                    $sql = "SELECT * FROM vw_historico_ocorrencia";
+
+                    $stmt = $this->pdo->prepare($sql);
+
+                    $stmt->execute();
+
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
     }
 ?>

@@ -58,6 +58,10 @@ $router->post('/logout', function (){
 
 });
 
+$router->get('/dashboard/relatorios', function () use ($ocorrenciaController){
+    $ocorrenciaController->historico();
+});
+
 
 $router->get('/ocorrencias/criar', function () {
 
