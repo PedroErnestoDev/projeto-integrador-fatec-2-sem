@@ -1,11 +1,11 @@
 <?php
 $sidebarProps = [
-    'active' => 'historico',
+    'active' => 'relatorios', // ajuste conforme o item do menu
 ];
 
 $topbarProps = [
-    'title'        => 'Histórico de Ocorrências',
-    'subtitle'     => 'Registro automático de alterações de status e setor',
+    'title'        => 'Relatório de Ocorrências',
+    'subtitle'     => 'Lista filtrável de todas as ocorrências',
     'userName'     => $_SESSION['nome_usuario'] ?? 'Usuário',
     'userRole'     => $_SESSION['perfil'] ?? '',
     'userInitials' => strtoupper(substr($_SESSION['nome_usuario'] ?? 'U', 0, 2)),
@@ -16,7 +16,7 @@ $topbarProps = [
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Play Park | Histórico de Ocorrências</title>
+  <title>Play Park | Relatório de Ocorrências</title>
   
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -142,11 +142,16 @@ $topbarProps = [
     .badge-concluida  { background: #d1fae5; color: #047857; }
     .badge-cancelada  { background: #fee2e2; color: #b91c1c; }
 
-    .change-arrow {
-      color: #94a3b8;
-      font-size: 0.85rem;
-      margin: 0 0.35rem;
+    .badge-prioridade {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
     }
+
+    .badge-baixa  { background: #e0f2fe; color: #0369a1; }
+    .badge-media  { background: #fef3c7; color: #b45309; }
+    .badge-alta   { background: #fee2e2; color: #b91c1c; }
 
     .setor-badge {
       background: #f1f5f9;
@@ -182,6 +187,15 @@ $topbarProps = [
         margin-left: 0;
       }
     }
+
+    @media print {
+      .sidebar, .topbar, .filter-card, .no-print {
+        display: none !important;
+      }
+      .main-content {
+        margin-left: 0 !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -195,66 +209,100 @@ $topbarProps = [
   
     <div class="content-area">
 
-      <!-- Filtros (ainda estáticos - pode implementar depois) -->
-      <div class="filter-card">
-        <div class="row g-3 align-items-end">
-          <div class="col-md-3">
-            <label class="form-label small text-muted mb-1">Buscar Ocorrência</label>
-            <input type="text" class="form-control form-control-sm" placeholder="ID ou OP...">
-          </div>
-          <div class="col-md-2">
-            <label class="form-label small text-muted mb-1">Status Novo</label>
-            <select class="form-select form-select-sm">
-              <option value="">Todos</option>
-              <option>Aberta</option>
-              <option>Em andamento</option>
-              <option>Concluída</option>
-              <option>Cancelada</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label small text-muted mb-1">Setor Novo</label>
-            <select class="form-select form-select-sm">
-              <option value="">Todos</option>
-              <option>Administração</option>
-              <option>Projeto</option>
-              <option>Corte</option>
-              <option>Impressão</option>
-              <option>Produção</option>
-            </select>
-          </div>
+      <!-- Filtros -->
+      <div class="filter-card no-print">
+        <form method="GET" class="row g-3 align-items-end">
+          
           <div class="col-md-2">
             <label class="form-label small text-muted mb-1">Data Inicial</label>
-            <input type="date" class="form-control form-control-sm">
+            <input type="date" name="data_inicio" class="form-control form-control-sm" 
+                   value="<?= htmlspecialchars($filtros['data_inicio'] ?? '') ?>">
           </div>
+
           <div class="col-md-2">
             <label class="form-label small text-muted mb-1">Data Final</label>
-            <input type="date" class="form-control form-control-sm">
+            <input type="date" name="data_fim" class="form-control form-control-sm" 
+                   value="<?= htmlspecialchars($filtros['data_fim'] ?? '') ?>">
           </div>
-          <div class="col-md-1">
-            <button class="btn btn-primary btn-sm w-100">
-              <i class="bi bi-funnel"></i>
+
+          <div class="col-md-2">
+            <label class="form-label small text-muted mb-1">Status</label>
+            <select name="fk_status" class="form-select form-select-sm">
+              <option value="">Todos</option>
+              <?php foreach ($status as $s): ?>
+                <option value="<?= $s['id_status'] ?>" 
+                  <?= ($filtros['fk_status'] ?? '') == $s['id_status'] ? 'selected' : '' ?>>
+                  <?= htmlspecialchars($s['nome_status']) ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label small text-muted mb-1">Setor</label>
+            <select name="fk_setor" class="form-select form-select-sm">
+              <option value="">Todos</option>
+              <?php foreach ($setores as $se): ?>
+                <option value="<?= $se['id_setor'] ?>" 
+                  <?= ($filtros['fk_setor'] ?? '') == $se['id_setor'] ? 'selected' : '' ?>>
+                  <?= htmlspecialchars($se['nome_setor']) ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label small text-muted mb-1">Prioridade</label>
+            <select name="fk_prioridade" class="form-select form-select-sm">
+              <option value="">Todas</option>
+              <?php foreach ($prioridades as $p): ?>
+                <option value="<?= $p['id_prioridade'] ?>" 
+                  <?= ($filtros['fk_prioridade'] ?? '') == $p['id_prioridade'] ? 'selected' : '' ?>>
+                  <?= htmlspecialchars($p['nome_prioridade']) ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label small text-muted mb-1">Ordem / Busca</label>
+            <input type="text" name="busca" class="form-control form-control-sm" 
+                   placeholder="OP, descrição..." 
+                   value="<?= htmlspecialchars($filtros['busca'] ?? '') ?>">
+          </div>
+
+          <div class="col-md-12 d-flex gap-2">
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="bi bi-funnel me-1"></i> Filtrar
             </button>
+            <a href="?" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-x-lg me-1"></i> Limpar
+            </a>
           </div>
-        </div>
+        </form>
       </div>
 
-      <!-- Tabela de Histórico -->
+      <!-- Tabela -->
       <div class="table-card">
         <div class="card-header-custom">
           <h5>
-            <i class="bi bi-clock-history me-2"></i>
-            Histórico de Alterações
+            <i class="bi bi-file-earmark-text me-2"></i>
+            Ocorrências
           </h5>
 
           <div class="d-flex align-items-center gap-3">
             <span class="text-muted small">
-              <?= count($historicos) ?> registro<?= count($historicos) !== 1 ? 's' : '' ?>
+              <?= count($ocorrencias) ?> registro<?= count($ocorrencias) !== 1 ? 's' : '' ?>
             </span>
 
-            <a href="/dashboard/historico/exportar" class="btn btn-success btn-sm">
-              <i class="bi bi-download me-1"></i> Exportar
+            <a href="?<?= http_build_query(array_merge($filtros ?? [], ['export' => 'csv'])) ?>" 
+               class="btn btn-success btn-sm no-print">
+              <i class="bi bi-download me-1"></i> Exportar CSV
             </a>
+
+            <button onclick="window.print()" class="btn btn-outline-secondary btn-sm no-print">
+              <i class="bi bi-printer me-1"></i> Imprimir
+            </button>
           </div>
         </div>
 
@@ -263,80 +311,78 @@ $topbarProps = [
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Ocorrência</th>
-                <th>Data / Hora</th>
+                <th>Ordem</th>
+                <th>Brinquedo</th>
+                <th>Colaborador</th>
+                <th>Prioridade</th>
                 <th>Status</th>
                 <th>Setor</th>
-                <th>Alterado por</th>
-                <th class="text-center">Ações</th>
+                <th>Abertura</th>
+                <th class="text-center no-print">Ações</th>
               </tr>
             </thead>
             <tbody>
-              <?php if (empty($historicos)): ?>
+              <?php if (empty($ocorrencias)): ?>
                 <tr>
-                  <td colspan="7" class="text-center text-muted py-4">
-                    Nenhum registro de histórico encontrado.
+                  <td colspan="9" class="text-center text-muted py-4">
+                    Nenhum registro encontrado com os filtros aplicados.
                   </td>
                 </tr>
               <?php else: ?>
-                <?php foreach ($historicos as $h): ?>
+                <?php foreach ($ocorrencias as $o): ?>
+                  <?php
+                    // Status badge
+                    $statusClass = match(strtolower($o['status'] ?? '')) {
+                      'aberta'        => 'badge-aberta',
+                      'em andamento'  => 'badge-andamento',
+                      'concluída', 'concluida' => 'badge-concluida',
+                      'cancelada'     => 'badge-cancelada',
+                      default         => 'badge-aberta'
+                    };
+
+                    // Prioridade badge
+                    $prioClass = match(strtolower($o['prioridade'] ?? '')) {
+                      'baixa'  => 'badge-baixa',
+                      'média', 'media' => 'badge-media',
+                      'alta'   => 'badge-alta',
+                      default  => 'badge-baixa'
+                    };
+                  ?>
                   <tr>
+                    <td><strong>#<?= $o['id_ocorrencia'] ?></strong></td>
                     <td>
-                      <strong>#<?= $h['id_historico'] ?></strong>
-                    </td>
-
-                    <td>
-                      <div class="fw-semibold">#<?= $h['id_ocorrencia'] ?></div>
-                      <div class="text-muted small"><?= htmlspecialchars($h['ordem_producao'] ?? '-') ?></div>
-                      <div class="text-muted small"><?= htmlspecialchars($h['brinquedo'] ?? '-') ?></div>
-                    </td>
-
-                    <td>
-                      <?= date('d/m/Y', strtotime($h['data_alteracao'])) ?><br>
-                      <span class="text-muted small"><?= date('H:i:s', strtotime($h['data_alteracao'])) ?></span>
-                    </td>
-
-                    <td>
-                      <?php
-                        $getStatusClass = function($status) {
-                          $status = strtolower(trim($status ?? ''));
-                          return match(true) {
-                            str_contains($status, 'aberta')     => 'badge-aberta',
-                            str_contains($status, 'andamento')  => 'badge-andamento',
-                            str_contains($status, 'conclu')     => 'badge-concluida',
-                            str_contains($status, 'cancel')     => 'badge-cancelada',
-                            default                             => 'badge-aberta'
-                          };
-                        };
-                      ?>
-                      <span class="badge-status <?= $getStatusClass($h['status_anterior']) ?>">
-                        <?= htmlspecialchars($h['status_anterior'] ?? '-') ?>
-                      </span>
-                      <span class="change-arrow">→</span>
-                      <span class="badge-status <?= $getStatusClass($h['status_novo']) ?>">
-                        <?= htmlspecialchars($h['status_novo'] ?? '-') ?>
-                      </span>
-                    </td>
-
-                    <td>
-                      <span class="setor-badge"><?= htmlspecialchars($h['setor_anterior'] ?? '-') ?></span>
-                      <span class="change-arrow">→</span>
-                      <span class="setor-badge"><?= htmlspecialchars($h['setor_novo'] ?? '-') ?></span>
-                    </td>
-
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                        <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" 
-                             style="width:28px;height:28px;font-size:0.7rem;font-weight:600;">
-                          <?= strtoupper(substr($h['usuario'] ?? 'U', 0, 1)) ?>
-                        </div>
-                        <span><?= htmlspecialchars($h['usuario'] ?? '-') ?></span>
+                      <div class="fw-semibold"><?= htmlspecialchars($o['ordem_producao'] ?? '-') ?></div>
+                      <div class="text-muted small" title="<?= htmlspecialchars($o['descricao_ocorrencia']) ?>">
+                        <?= htmlspecialchars(mb_strimwidth($o['descricao_ocorrencia'], 0, 40, '...')) ?>
                       </div>
                     </td>
-
-                    <td class="text-center">
-                      <a href="/dashboard/ocorrencias/detalhes/<?= $h['id_ocorrencia'] ?>" 
-                         class="btn-view" title="Ver ocorrência">
+                    <td>
+                      <div><?= htmlspecialchars($o['brinquedo']) ?></div>
+                      <div class="text-muted small"><?= htmlspecialchars($o['codigo_brinquedo'] ?? '') ?></div>
+                    </td>
+                    <td><?= htmlspecialchars($o['colaborador']) ?></td>
+                    <td>
+                      <span class="badge-prioridade <?= $prioClass ?>">
+                        <?= htmlspecialchars($o['prioridade']) ?>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge-status <?= $statusClass ?>">
+                        <?= htmlspecialchars($o['status']) ?>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="setor-badge"><?= htmlspecialchars($o['setor'] ?? '-') ?></span>
+                    </td>
+                    <td>
+                      <?= $o['data_abertura'] ? date('d/m/Y', strtotime($o['data_abertura'])) : '-' ?><br>
+                      <span class="text-muted small">
+                        <?= $o['data_abertura'] ? date('H:i', strtotime($o['data_abertura'])) : '' ?>
+                      </span>
+                    </td>
+                    <td class="text-center no-print">
+                      <a href="/dashboard/ocorrencias/detalhes/<?= $o['id_ocorrencia'] ?>" 
+                         class="btn-view" title="Ver detalhes">
                         <i class="bi bi-eye"></i>
                       </a>
                     </td>
