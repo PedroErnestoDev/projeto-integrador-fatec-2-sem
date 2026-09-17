@@ -128,6 +128,27 @@
             return $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
+        public function contarPorMes(): array {
+    $sql = "
+        SELECT
+            DATE_FORMAT(criado_em, '%Y-%m') AS mes,
+            COUNT(*) AS total
+        FROM ocorrencia
+        WHERE criado_em >= DATE_FORMAT(
+            DATE_SUB(CURDATE(), INTERVAL 2 MONTH),
+            '%Y-%m-01'
+        )
+        GROUP BY DATE_FORMAT(criado_em, '%Y-%m')
+        ORDER BY mes ASC
+    ";
+
+    $stmt = $this->pdo->prepare($sql);
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         public function listarTopCincoBrinquedos(): array {
                 $sql = "
                     SELECT

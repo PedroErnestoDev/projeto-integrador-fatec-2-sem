@@ -67,6 +67,7 @@ CREATE TABLE ocorrencia (
     fk_prioridade INT NOT NULL,
     fk_status INT NOT NULL,
     fk_usuario INT NOT NULL,
+    fk_setor INT NULL,
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
@@ -74,7 +75,8 @@ CREATE TABLE ocorrencia (
     FOREIGN KEY (fk_brinquedo) REFERENCES brinquedo(id_brinquedo),
     FOREIGN KEY (fk_prioridade) REFERENCES prioridade(id_prioridade),
     FOREIGN KEY (fk_status) REFERENCES status(id_status),
-    FOREIGN KEY (fk_usuario) REFERENCES usuario(id_usuario)
+    FOREIGN KEY (fk_usuario) REFERENCES usuario(id_usuario),
+    FOREIGN KEY (fk_setor) REFERENCES setor(id_setor)
 );
 
 CREATE TABLE encaminhamento (

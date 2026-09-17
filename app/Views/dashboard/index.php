@@ -500,7 +500,7 @@ $topbarProps = [
         <!-- Bar - Setor -->
         <div class="col-lg-4">
           <div class="chart-card">
-            <h6 class="card-title">Ocorrências por Prioridade</h6>
+            <h6 class="card-title">Ocorrências por Mês</h6>
             <div class="chart-container">
               <canvas id="setorChart"></canvas>
             </div>
@@ -647,42 +647,77 @@ $topbarProps = [
     });
 
     // Bar - Prioridade
-    new Chart(document.getElementById('setorChart'), {
-      type: 'bar',
-      data: {
-        labels: ['Alta', 'Média', 'Baixa'],
+   const ocorrenciasPorMes = <?= json_encode(
+    $ocorrenciasPorMes ?? [],
+    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+) ?>;
+
+const mesesNomes = {
+    '01': 'Janeiro',
+    '02': 'Fevereiro',
+    '03': 'Março',
+    '04': 'Abril',
+    '05': 'Maio',
+    '06': 'Junho',
+    '07': 'Julho',
+    '08': 'Agosto',
+    '09': 'Setembro',
+    '10': 'Outubro',
+    '11': 'Novembro',
+    '12': 'Dezembro'
+};
+
+const mesLabels = ocorrenciasPorMes.map(item => {
+    const numeroMes = item.mes.split('-')[1];
+    return mesesNomes[numeroMes];
+});
+
+const mesValores = ocorrenciasPorMes.map(item => Number(item.total));
+
+new Chart(document.getElementById('setorChart'), {
+    type: 'bar',
+    data: {
+        labels: mesLabels,
         datasets: [{
-          data: [<?= $estatisticaPrioridade['alta']?>, <?= $estatisticaPrioridade['media']?>, <?= $estatisticaPrioridade['baixa']?>],
-          backgroundColor: ['#f33737', '#f59e0b', '#10b981'],
-          borderRadius: 0,
-          borderSkipped: false,
-          barPercentage: 0.90
+            label: 'Ocorrências',
+            data: mesValores,
+            backgroundColor: '#3b82f6',
+            borderRadius: 0,
+            borderSkipped: false,
+            barPercentage: 0.70
         }]
-      },
-      options: {
+    },
+    options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: ctx => ` ${ctx.raw} Ocorrencias`
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    label: ctx => ` ${ctx.raw} Ocorrências`
+                }
             }
-          }
         },
         scales: {
-          y: {
-            beginAtZero: true,
-            max: 50,
-            grid: { color: '#f1f5f9' },
-            ticks: { stepSize: 15 }
-          },
-          x: {
-            grid: { display: false }
-          }
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: '#f1f5f9'
+                },
+                ticks: {
+                    stepSize: 10
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
         }
-      }
-    });
+    }
+});
     
     new Chart(document.getElementById('brinquedoChart'), {
     type: 'bar',
