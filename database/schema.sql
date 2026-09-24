@@ -75,7 +75,7 @@ CREATE TABLE ocorrencia (
     FOREIGN KEY (fk_brinquedo) REFERENCES brinquedo(id_brinquedo),
     FOREIGN KEY (fk_prioridade) REFERENCES prioridade(id_prioridade),
     FOREIGN KEY (fk_status) REFERENCES status(id_status),
-    FOREIGN KEY (fk_usuario) REFERENCES usuario(id_usuario),
+ FOREIGN KEY (fk_usuario) REFERENCES usuario(id_usuario),
     FOREIGN KEY (fk_setor) REFERENCES setor(id_setor)
 );
 

@@ -13,6 +13,7 @@ require_once __DIR__ . '/../app/Controllers/UsuarioController.php';
 require_once __DIR__ . '/../app/Controllers/ColaboradorController.php';
 require_once __DIR__ . '/../app/Controllers/BrinquedoController.php';
 require_once __DIR__ . '/../app/Controllers/OcorrenciaController.php';
+require_once __DIR__ . '/../app/Controllers/RelatorioController.php';
 require_once __DIR__ . '/../app/Controllers/DashboardController.php';
 require_once __DIR__ . '/../app/Controllers/SetorController.php';
 
@@ -28,6 +29,7 @@ $usuarioController = new UsuarioController($pdo);
 $colaboradorController = new ColaboradorController($pdo);
 $brinquedoController = new BrinquedoController($pdo);
 $ocorrenciaController = new OcorrenciaController($pdo);
+$relatorioController = new RelatorioController($pdo);
 $dashboardController = new DashboardController($pdo);
 $setorController = new SetorController($pdo);
 
@@ -56,6 +58,10 @@ $router->post('/logout', function (){
 
     Auth::deslogar();
 
+});
+
+$router->get('/dashboard/relatorios', function () use ($relatorioController){
+    $relatorioController->ocorrencias();
 });
 
 

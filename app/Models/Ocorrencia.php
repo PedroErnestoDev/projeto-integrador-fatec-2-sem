@@ -412,5 +412,115 @@
                         ':id'=> $id
                      ]);
                 }
+
+                public function listarHistorico(): array {
+                    $sql = "SELECT * FROM vw_historico_ocorrencia";
+
+                    $stmt = $this->pdo->prepare($sql);
+
+                    $stmt->execute();
+
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+
+                public function listarComFiltros(array $filtros = []): array
+                {
+                    $sql = "SELECT
+                                o.id_ocorrencia,
+                                o.ordem_producao,
+                                o.descricao_ocorrencia,
+                                o.solucao_ocorrencia,
+                                o.data_abertura,
+                                o.data_atualizacao,
+                                o.data_conclusao,
+
+                                o.fk_colaborador,
+                                c.nome_colaborador AS colaborador,
+
+                                o.fk_brinquedo,
+                                b.nome_brinquedo AS brinquedo,
+                                b.codigo_brinquedo,
+
+                                o.fk_prioridade,
+                                p.nome_prioridade AS prioridade,
+
+                                o.fk_status,
+                                s.nome_status AS status,
+
+                                o.fk_usuario,
+                                u.login_usuario AS usuario,
+                                u.nome_usuario,
+
+                                o.criado_em,
+                                o.atualizado_em,
+                                o.fk_setor,
+                                se.nome_setor AS setor
+
+                            FROM ocorrencia o
+
+                            INNER JOIN colaborador c ON c.id_colaborador = o.fk_colaborador
+                            INNER JOIN brinquedo b ON b.id_brinquedo = o.fk_brinquedo
+                            INNER JOIN prioridade p ON p.id_prioridade = o.fk_prioridade
+                            INNER JOIN status s ON s.id_status = o.fk_status
+                            INNER JOIN usuario u ON u.id_usuario = o.fk_usuario
+                            LEFT JOIN setor se ON se.id_setor = o.fk_setor
+
+                            WHERE 1=1
+                    ";
+
+                    $params = [];
+
+                    if (!empty($filtros['data_inicio'])) {
+                        $sql .= " AND DATE(o.data_abertura) >= :data_inicio";
+                        $params[':data_inicio'] = $filtros['data_inicio'];
+                    }
+
+                    if (!empty($filtros['data_fim'])) {
+                        $sql .= " AND DATE(o.data_abertura) <= :data_fim";
+                        $params[':data_fim'] = $filtros['data_fim'];
+                    }
+
+                    if (!empty($filtros['fk_status'])) {
+                        $sql .= " AND o.fk_status = :fk_status";
+                        $params[':fk_status'] = (int) $filtros['fk_status'];
+                    }
+
+                    if (!empty($filtros['fk_setor'])) {
+                        $sql .= " AND o.fk_setor = :fk_setor";
+                        $params[':fk_setor'] = (int) $filtros['fk_setor'];
+                    }
+
+                    if (!empty($filtros['fk_prioridade'])) {
+                        $sql .= " AND o.fk_prioridade = :fk_prioridade";
+                        $params[':fk_prioridade'] = (int) $filtros['fk_prioridade'];
+                    }
+
+                    if (!empty($filtros['ordem_producao'])) {
+                        $sql .= " AND o.ordem_producao LIKE :ordem_producao";
+                        $params[':ordem_producao'] = '%' . $filtros['ordem_producao'] . '%';
+                    }
+
+                    if (!empty($filtros['codigo_brinquedo'])) {
+                        $sql .= " AND b.codigo_brinquedo LIKE :codigo_brinquedo";
+                        $params[':codigo_brinquedo'] = '%' . $filtros['codigo_brinquedo'] . '%';
+                    }
+
+                    if (!empty($filtros['busca'])) {
+                        $sql .= " AND (
+                            o.descricao_ocorrencia LIKE :busca 
+                            OR o.ordem_producao LIKE :busca 
+                            OR b.nome_brinquedo LIKE :busca
+                            OR c.nome_colaborador LIKE :busca
+                        )";
+                        $params[':busca'] = '%' . $filtros['busca'] . '%';
+                    }
+
+                    $sql .= " ORDER BY o.data_abertura DESC, o.id_ocorrencia DESC";
+
+                    $stmt = $this->pdo->prepare($sql);
+                    $stmt->execute($params);
+
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
     }
 ?>

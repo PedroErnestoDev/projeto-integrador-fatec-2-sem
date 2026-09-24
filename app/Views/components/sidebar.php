@@ -235,7 +235,7 @@ $active = $sidebarProps['active'] ?? 'dashboard';
 
         <div class="nav-section-label mt-3">Sistema</div>
 
-        <a href="#" class="nav-link <?= $active === 'relatorios' ? 'active' : '' ?>">
+        <a href="/dashboard/relatorios" class="nav-link <?= $active === 'relatorios' ? 'active' : '' ?>">
             <i class="bi bi-bar-chart-line"></i>
             <span>Relatórios</span>
         </a>

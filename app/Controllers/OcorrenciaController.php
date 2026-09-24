@@ -300,6 +300,12 @@
             exit;
         }
 
-        
+        public function historico(): void{
+            Auth::exigirPerfil(Perfil::ADMIN);
+
+            $historicos = $this->ocorrencia->listarHistorico();
+
+            require_once __DIR__ . '/../Views/dashboard/relatorios/index.php';
+        }
     }
 ?>
