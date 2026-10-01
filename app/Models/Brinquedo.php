@@ -17,16 +17,23 @@
         }
 
         public function criar(
-            string $nome_brinquedo
-        ): bool {
-            $sql = "INSERT INTO brinquedo (nome_brinquedo, codigo_brinquedo, brinquedo_ativo) VALUES (:nome_brinquedo, 1, 1)";
+        string $nome_brinquedo
+    ): bool {
 
-            $stmt = $this->pdo->prepare($sql);
+        // Gera um código único para o brinquedo
+        $codigo_brinquedo = 'BRQ-' . strtoupper(bin2hex(random_bytes(8)));
 
-            return $stmt->execute([
-                ':nome_brinquedo' => $nome_brinquedo
-            ]);
-        }
+        $sql = "INSERT INTO brinquedo 
+                (nome_brinquedo, codigo_brinquedo, brinquedo_ativo) 
+                VALUES (:nome_brinquedo, :codigo_brinquedo, 1)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            ':nome_brinquedo' => $nome_brinquedo,
+            ':codigo_brinquedo' => $codigo_brinquedo
+        ]);
+    }
 
 
         public function editar(
