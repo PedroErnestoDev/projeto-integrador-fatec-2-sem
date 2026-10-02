@@ -414,11 +414,27 @@
                 }
 
                 public function listarHistorico(): array {
-                    $sql = "SELECT * FROM vw_historico_ocorrencia";
+                    $sql = "SELECT * FROM vw_historico_ocorrencias ORDER BY data DESC";
 
                     $stmt = $this->pdo->prepare($sql);
 
                     $stmt->execute();
+
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+
+                public function listarHistoricoPorId(int $id): array
+                {
+                    $sql = "SELECT * 
+                            FROM vw_historico_ocorrencias 
+                            WHERE ocorrencia = :id
+                            ORDER BY data DESC";
+
+                    $stmt = $this->pdo->prepare($sql);
+
+                    $stmt->execute([
+                        ':id' => $id
+                    ]);
 
                     return $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }
