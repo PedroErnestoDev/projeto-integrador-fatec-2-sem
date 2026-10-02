@@ -19,7 +19,7 @@
 
             $estatisticas = $this->ocorrencia->contarPorStatus();
 
-            $estatisticaPrioridade = $this->ocorrencia->contarPorPrioridade();
+            $ocorrenciasPorMes = $this->ocorrencia->contarPorMes();
 
             $topBrinquedos = $this->ocorrencia->listarTopCincoBrinquedos();
             
