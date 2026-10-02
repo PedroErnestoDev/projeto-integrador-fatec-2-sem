@@ -81,7 +81,8 @@
                 require_once __DIR__ . "/../Views/dashboard/ocorrencias/index.php";
             }
 
-            public function detalhes(int $id): void{
+            public function detalhes(int $id): void
+            {
                 Auth::exigirPerfil(Perfil::ADMIN, Perfil::SUPERVISOR);
 
                 if ($id <= 0) {
@@ -97,6 +98,9 @@
                     echo "Ocorrência não encontrada.";
                     return;
                 }
+
+                // Carrega o histórico da ocorrência
+                $historico = $this->ocorrencia->listarHistoricoPorId($id);
 
                 require_once __DIR__ . "/../Views/dashboard/ocorrencias/detalhes.php";
             }
@@ -301,11 +305,11 @@
         }
 
         public function historico(): void{
-            Auth::exigirPerfil(Perfil::ADMIN);
+            Auth::exigirPerfil(Perfil::ADMIN, Perfil::SUPERVISOR);
 
             $historicos = $this->ocorrencia->listarHistorico();
 
-            require_once __DIR__ . '/../Views/dashboard/relatorios/index.php';
+            require_once __DIR__ . '/../Views/dashboard/historicos/index.php';
         }
     }
 ?>

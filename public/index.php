@@ -64,6 +64,12 @@ $router->get('/dashboard/relatorios', function () use ($relatorioController){
     $relatorioController->ocorrencias();
 });
 
+$router->get('/dashboard/historicos', function () use ($ocorrenciaController){
+    
+    $ocorrenciaController->historico();
+
+});
+
 
 $router->get('/ocorrencias/criar', function () {
 
@@ -99,6 +105,12 @@ $router->get('/dashboard/ocorrencias', function () use ($ocorrenciaController) {
 $router->get('/dashboard/ocorrencias/detalhes/{id}', function (int $id) use ($ocorrenciaController) {
 
     $ocorrenciaController->detalhes($id);
+
+});
+
+$router->get('/dashboard/ocorrencias/detalhes/{id}', function (int $id) use ($ocorrenciaController) {
+
+    $ocorrenciaController->historicoPorId($id);
 
 });
 

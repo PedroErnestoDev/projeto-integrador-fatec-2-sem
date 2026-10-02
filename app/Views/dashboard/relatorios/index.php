@@ -134,7 +134,7 @@ $topbarProps = [
       font-size: 0.72rem;
       font-weight: 600;
       padding: 0.3rem 0.65rem;
-      border-radius: 999px;
+      border-radius: 2px;
     }
 
     .badge-aberta     { background: #dbeafe; color: #1d4ed8; }
@@ -146,7 +146,7 @@ $topbarProps = [
       font-size: 0.72rem;
       font-weight: 600;
       padding: 0.3rem 0.65rem;
-      border-radius: 999px;
+      border-radius: 2px;
     }
 
     .badge-baixa  { background: #e0f2fe; color: #0369a1; }
@@ -159,7 +159,7 @@ $topbarProps = [
       font-size: 0.75rem;
       font-weight: 500;
       padding: 0.25rem 0.55rem;
-      border-radius: 0.4rem;
+      border-radius: 2px;
     }
 
     .btn-view {
