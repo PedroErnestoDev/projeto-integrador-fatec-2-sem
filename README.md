@@ -76,8 +76,6 @@ Nota: O banco de dados `playpark` será criado automaticamente na primeira execu
 
 * Ítalo Kawamura Gabriel
 
-* Giovanna Alves Gomes
-
 * Gustavo Beltrame Vitoriano
 
 * Gabriel Ferretti
