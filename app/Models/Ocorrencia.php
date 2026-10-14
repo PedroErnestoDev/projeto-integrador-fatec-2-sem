@@ -1,37 +1,41 @@
 <?php
-    class Ocorrencia{
-        private PDO $pdo;
 
-        public function __construct(PDO $pdo) {
-            $this->pdo = $pdo;
-        }
+class Ocorrencia
+{
+    private PDO $pdo;
 
-        public function criar(
-            int $fkColaborador,
-            int $fkBrinquedo,
-            string $ordemProducao,
-            string $descricao,
-            int $fkPrioridade,
-            int $fkUsuario,
-        ): bool {
-            $sql = "INSERT INTO ocorrencia (fk_colaborador, fk_brinquedo, ordem_producao, descricao_ocorrencia, fk_prioridade, fk_status, fk_usuario, fk_setor) 
+    public function __construct(PDO $pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    public function criar(
+        int $fkColaborador,
+        int $fkBrinquedo,
+        string $ordemProducao,
+        string $descricao,
+        int $fkPrioridade,
+        int $fkUsuario
+    ): bool {
+        $sql = "INSERT INTO ocorrencia (fk_colaborador, fk_brinquedo, ordem_producao, descricao_ocorrencia, fk_prioridade, fk_status, fk_usuario, fk_setor) 
                 VALUES (:fk_colaborador, :fk_brinquedo, :ordem_producao, :descricao_ocorrencia, :fk_prioridade, 1, :fk_usuario, 2)
             ";
 
-            $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-            return $stmt->execute([
-                ':fk_colaborador' => $fkColaborador,
-                ':fk_brinquedo' => $fkBrinquedo,
-                ':ordem_producao' => $ordemProducao,
-                ':descricao_ocorrencia' => $descricao,
-                ':fk_prioridade' => $fkPrioridade,
-                ':fk_usuario' => $fkUsuario
-            ]);
-        }
+        return $stmt->execute([
+            ':fk_colaborador' => $fkColaborador,
+            ':fk_brinquedo' => $fkBrinquedo,
+            ':ordem_producao' => $ordemProducao,
+            ':descricao_ocorrencia' => $descricao,
+            ':fk_prioridade' => $fkPrioridade,
+            ':fk_usuario' => $fkUsuario
+        ]);
+    }
 
-        public function listarCincoRecentes(): array{
-            $sql = "SELECT o.id_ocorrencia, o.criado_em, c.nome_colaborador AS colaborador, b.nome_brinquedo AS brinquedo, p.nome_prioridade AS prioridade, s.nome_status AS status, o.fk_setor,
+    public function listarCincoRecentes(): array
+    {
+        $sql = "SELECT o.id_ocorrencia, o.criado_em, c.nome_colaborador AS colaborador, b.nome_brinquedo AS brinquedo, p.nome_prioridade AS prioridade, s.nome_status AS status, o.fk_setor,
             se.nome_setor AS setor FROM ocorrencia o
 
             INNER JOIN colaborador c
@@ -55,15 +59,16 @@
 
             LIMIT 5";
 
-             $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-             $stmt->execute();
+        $stmt->execute();
 
-             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-        public function contarPorStatus(): array {
-            $sql = "SELECT
+    public function contarPorStatus(): array
+    {
+        $sql = "SELECT
             COUNT(*) AS total,
 
             SUM(
@@ -89,15 +94,16 @@
 
             FROM ocorrencia";
 
-            $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-            $stmt->execute();
+        $stmt->execute();
 
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        }
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
-        public function contarPorPrioridade(): array {
-            $sql = "SELECT
+    public function contarPorPrioridade(): array
+    {
+        $sql = "SELECT
             SUM(
                 CASE
                     WHEN fk_prioridade = 1 THEN 1
@@ -121,15 +127,16 @@
 
             FROM ocorrencia";
 
-            $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-            $stmt->execute();
+        $stmt->execute();
 
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        }
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
-        public function contarPorMes(): array {
-    $sql = "
+    public function contarPorMes(): array
+    {
+        $sql = "
         SELECT
             DATE_FORMAT(criado_em, '%Y-%m') AS mes,
             COUNT(*) AS total
@@ -142,15 +149,16 @@
         ORDER BY mes ASC
     ";
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-    $stmt->execute();
+        $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-        public function listarTopCincoBrinquedos(): array {
-                $sql = "
+    public function listarTopCincoBrinquedos(): array
+    {
+        $sql = "
                     SELECT
                         b.nome_brinquedo AS brinquedo,
                         COUNT(o.id_ocorrencia) AS total
@@ -169,14 +177,16 @@
                     LIMIT 5
                 ";
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute();
+        $stmt = $this->pdo->prepare($sql);
 
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-    
-        public function listarTodas(): array {
-                $sql = "SELECT
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function listarTodas(): array
+    {
+        $sql = "SELECT
                         o.id_ocorrencia,
                         o.ordem_producao,
                         o.descricao_ocorrencia,
@@ -230,14 +240,16 @@
                         o.id_ocorrencia DESC
                 ";
 
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute();
+        $stmt = $this->pdo->prepare($sql);
 
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            }
+        $stmt->execute();
 
-            public function buscarPorId(int $id): ?array{
-                $sql = "SELECT
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function buscarPorId(int $id): ?array
+    {
+        $sql = "SELECT
                             o.id_ocorrencia,
                             o.ordem_producao,
                             o.descricao_ocorrencia,
@@ -292,29 +304,29 @@
                         LIMIT 1
                     ";
 
-                    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-                    $stmt->execute([
-                        ':id' => $id
-                    ]);
+        $stmt->execute([
+            ':id' => $id
+        ]);
 
-                    $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                    return $resultado ?: null;
-                }
+        return $resultado ?: null;
+    }
 
-                public function atualizar(
-                    int $id,
-                    int $colaborador,
-                    int $brinquedo,
-                    string $ordemProducao,
-                    string $descricao,
-                    ?string $solucao,
-                    int $prioridade,
-                    int $status
-                ): bool {
 
-                    $sql = "
+    public function atualizar(
+        int $id,
+        int $colaborador,
+        int $brinquedo,
+        string $ordemProducao,
+        string $descricao,
+        ?string $solucao,
+        int $prioridade,
+        int $status
+    ): bool {
+        $sql = "
                         UPDATE ocorrencia
                         SET
                             fk_colaborador = :colaborador,
@@ -330,118 +342,120 @@
                         WHERE id_ocorrencia = :id
                     ";
 
-                    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-                    $stmt->bindValue(
-                        ':id',
-                        $id,
-                        PDO::PARAM_INT
-                    );
+        $stmt->bindValue(
+            ':id',
+            $id,
+            PDO::PARAM_INT
+        );
 
-                    $stmt->bindValue(
-                        ':colaborador',
-                        $colaborador,
-                        PDO::PARAM_INT
-                    );
+        $stmt->bindValue(
+            ':colaborador',
+            $colaborador,
+            PDO::PARAM_INT
+        );
 
-                    $stmt->bindValue(
-                        ':brinquedo',
-                        $brinquedo,
-                        PDO::PARAM_INT
-                    );
+        $stmt->bindValue(
+            ':brinquedo',
+            $brinquedo,
+            PDO::PARAM_INT
+        );
 
-                    $stmt->bindValue(
-                        ':ordem_producao',
-                        $ordemProducao,
-                        PDO::PARAM_STR
-                    );
+        $stmt->bindValue(
+            ':ordem_producao',
+            $ordemProducao,
+            PDO::PARAM_STR
+        );
 
-                    $stmt->bindValue(
-                        ':descricao',
-                        $descricao,
-                        PDO::PARAM_STR
-                    );
+        $stmt->bindValue(
+            ':descricao',
+            $descricao,
+            PDO::PARAM_STR
+        );
 
-                    $stmt->bindValue(
-                        ':solucao',
-                        $solucao,
-                        $solucao === null
-                            ? PDO::PARAM_NULL
-                            : PDO::PARAM_STR
-                    );
+        $stmt->bindValue(
+            ':solucao',
+            $solucao,
+            $solucao === null
+                ? PDO::PARAM_NULL
+                : PDO::PARAM_STR
+        );
 
-                    $stmt->bindValue(
-                        ':prioridade',
-                        $prioridade,
-                        PDO::PARAM_INT
-                    );
+        $stmt->bindValue(
+            ':prioridade',
+            $prioridade,
+            PDO::PARAM_INT
+        );
 
-                    $stmt->bindValue(
-                        ':status',
-                        $status,
-                        PDO::PARAM_INT
-                    );
+        $stmt->bindValue(
+            ':status',
+            $status,
+            PDO::PARAM_INT
+        );
 
-                    return $stmt->execute();
-                }
+        return $stmt->execute();
+    }
 
-                public function deletar(int $id): bool
-                {
-                    $sql = "
+    public function deletar(int $id): bool
+    {
+        $sql = "
                         DELETE FROM ocorrencia
                         WHERE id_ocorrencia = :id
                     ";
 
-                    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-                    return $stmt->execute([
-                        ':id' => $id
-                    ]);
-                }
+        return $stmt->execute([
+            ':id' => $id
+        ]);
+    }
 
-                public function encaminhar(
-                    int $id,
-                    int $fk_setor
-                ) : bool{
-                     $sql = "UPDATE ocorrencia SET fk_setor = :fk_setor WHERE id_ocorrencia = :id";
+    public function encaminhar(
+        int $id,
+        int $fk_setor
+    ): bool {
+        $sql = "UPDATE ocorrencia SET fk_setor = :fk_setor WHERE id_ocorrencia = :id";
 
-                     $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-                     return $stmt->execute([
-                        ':fk_setor'=> $fk_setor,
-                        ':id'=> $id
-                     ]);
-                }
+        return $stmt->execute([
+            ':fk_setor' => $fk_setor,
+            ':id' => $id
+        ]);
+    }
 
-                public function listarHistorico(): array {
-                    $sql = "SELECT * FROM vw_historico_ocorrencias ORDER BY data DESC";
+    public function listarHistorico(): array
+    {
+        $sql = "SELECT * FROM vw_historico_ocorrencias ORDER BY data DESC";
 
-                    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-                    $stmt->execute();
+        $stmt->execute();
 
-                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-                }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-                public function listarHistoricoPorId(int $id): array
-                {
-                    $sql = "SELECT * 
+    public function listarHistoricoPorId(int $id): array
+    {
+        $sql = "SELECT * 
                             FROM vw_historico_ocorrencias 
                             WHERE ocorrencia = :id
                             ORDER BY data DESC";
 
-                    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-                    $stmt->execute([
-                        ':id' => $id
-                    ]);
+        $stmt->execute([
+            ':id' => $id
+        ]);
 
-                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-                }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-                public function listarComFiltros(array $filtros = []): array
-                {
-                    $sql = "SELECT
+
+    public function listarComFiltros(array $filtros = []): array
+    {
+        $sql = "SELECT
                                 o.id_ocorrencia,
                                 o.ordem_producao,
                                 o.descricao_ocorrencia,
@@ -484,59 +498,59 @@
                             WHERE 1=1
                     ";
 
-                    $params = [];
+        $params = [];
 
-                    if (!empty($filtros['data_inicio'])) {
-                        $sql .= " AND DATE(o.data_abertura) >= :data_inicio";
-                        $params[':data_inicio'] = $filtros['data_inicio'];
-                    }
+        if (!empty($filtros['data_inicio'])) {
+            $sql .= " AND DATE(o.data_abertura) >= :data_inicio";
+            $params[':data_inicio'] = $filtros['data_inicio'];
+        }
 
-                    if (!empty($filtros['data_fim'])) {
-                        $sql .= " AND DATE(o.data_abertura) <= :data_fim";
-                        $params[':data_fim'] = $filtros['data_fim'];
-                    }
+        if (!empty($filtros['data_fim'])) {
+            $sql .= " AND DATE(o.data_abertura) <= :data_fim";
+            $params[':data_fim'] = $filtros['data_fim'];
+        }
 
-                    if (!empty($filtros['fk_status'])) {
-                        $sql .= " AND o.fk_status = :fk_status";
-                        $params[':fk_status'] = (int) $filtros['fk_status'];
-                    }
+        if (!empty($filtros['fk_status'])) {
+            $sql .= " AND o.fk_status = :fk_status";
+            $params[':fk_status'] = (int) $filtros['fk_status'];
+        }
 
-                    if (!empty($filtros['fk_setor'])) {
-                        $sql .= " AND o.fk_setor = :fk_setor";
-                        $params[':fk_setor'] = (int) $filtros['fk_setor'];
-                    }
+        if (!empty($filtros['fk_setor'])) {
+            $sql .= " AND o.fk_setor = :fk_setor";
+            $params[':fk_setor'] = (int) $filtros['fk_setor'];
+        }
 
-                    if (!empty($filtros['fk_prioridade'])) {
-                        $sql .= " AND o.fk_prioridade = :fk_prioridade";
-                        $params[':fk_prioridade'] = (int) $filtros['fk_prioridade'];
-                    }
+        if (!empty($filtros['fk_prioridade'])) {
+            $sql .= " AND o.fk_prioridade = :fk_prioridade";
+            $params[':fk_prioridade'] = (int) $filtros['fk_prioridade'];
+        }
 
-                    if (!empty($filtros['ordem_producao'])) {
-                        $sql .= " AND o.ordem_producao LIKE :ordem_producao";
-                        $params[':ordem_producao'] = '%' . $filtros['ordem_producao'] . '%';
-                    }
+        if (!empty($filtros['ordem_producao'])) {
+            $sql .= " AND o.ordem_producao LIKE :ordem_producao";
+            $params[':ordem_producao'] = '%' . $filtros['ordem_producao'] . '%';
+        }
 
-                    if (!empty($filtros['codigo_brinquedo'])) {
-                        $sql .= " AND b.codigo_brinquedo LIKE :codigo_brinquedo";
-                        $params[':codigo_brinquedo'] = '%' . $filtros['codigo_brinquedo'] . '%';
-                    }
+        if (!empty($filtros['codigo_brinquedo'])) {
+            $sql .= " AND b.codigo_brinquedo LIKE :codigo_brinquedo";
+            $params[':codigo_brinquedo'] = '%' . $filtros['codigo_brinquedo'] . '%';
+        }
 
-                    if (!empty($filtros['busca'])) {
-                        $sql .= " AND (
+        if (!empty($filtros['busca'])) {
+            $sql .= " AND (
                             o.descricao_ocorrencia LIKE :busca 
                             OR o.ordem_producao LIKE :busca 
                             OR b.nome_brinquedo LIKE :busca
                             OR c.nome_colaborador LIKE :busca
                         )";
-                        $params[':busca'] = '%' . $filtros['busca'] . '%';
-                    }
+            $params[':busca'] = '%' . $filtros['busca'] . '%';
+        }
 
-                    $sql .= " ORDER BY o.data_abertura DESC, o.id_ocorrencia DESC";
+        $sql .= " ORDER BY o.data_abertura DESC, o.id_ocorrencia DESC";
 
-                    $stmt = $this->pdo->prepare($sql);
-                    $stmt->execute($params);
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
 
-                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-                }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-?>
+}
+

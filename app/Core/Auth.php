@@ -1,6 +1,7 @@
 <?php
 
-class Auth{
+class Auth
+{
     public static function iniciarSessao(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
