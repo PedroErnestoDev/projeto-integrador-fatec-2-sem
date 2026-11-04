@@ -1,25 +1,28 @@
 <?php
-    class Brinquedo{
-        private PDO $pdo;
 
-        public function __construct(PDO $pdo) {
-            $this->pdo = $pdo;
-        }
+class Brinquedo
+{
+    private PDO $pdo;
 
-        public function listar(): ?array{
-            $sql = "SELECT id_brinquedo, nome_brinquedo FROM brinquedo ORDER BY nome_brinquedo ASC";
+    public function __construct(PDO $pdo)
+    {
+        $this->pdo = $pdo;
+    }
 
-            $stmt = $this->pdo->prepare($sql);
-            
-            $stmt->execute();
+    public function listar(): ?array
+    {
+        $sql = "SELECT id_brinquedo, nome_brinquedo FROM brinquedo ORDER BY nome_brinquedo ASC";
 
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
+        $stmt = $this->pdo->prepare($sql);
 
-        public function criar(
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function criar(
         string $nome_brinquedo
     ): bool {
-
         // Gera um código único para o brinquedo
         $codigo_brinquedo = 'BRQ-' . strtoupper(bin2hex(random_bytes(8)));
 
@@ -35,31 +38,29 @@
         ]);
     }
 
+    public function editar(
+        int $id,
+        string $nome_brinquedo
+    ): bool {
+        $sql = "UPDATE brinquedo SET nome_brinquedo = :nome_brinquedo WHERE id_brinquedo = :id";
 
-        public function editar(
-            int $id,
-            string $nome_brinquedo
-        ): bool{
-            $sql = "UPDATE brinquedo SET nome_brinquedo = :nome_brinquedo WHERE id_brinquedo = :id";
+        $stmt = $this->pdo->prepare($sql);
 
-            $stmt = $this->pdo->prepare($sql);
-
-            return $stmt->execute([
-                ':id' => $id,
-                ':nome_brinquedo' => $nome_brinquedo
-            ]);
-        }
-
-        public function excluir(
-            int $id
-        ): bool{
-            $sql = "DELETE FROM brinquedo WHERE id_brinquedo = :id";
-
-            $stmt = $this->pdo->prepare($sql);
-
-            return $stmt->execute([
-                ':id' => $id
-            ]);
-        }
+        return $stmt->execute([
+            ':id' => $id,
+            ':nome_brinquedo' => $nome_brinquedo
+        ]);
     }
-?>
+
+    public function excluir(
+        int $id
+    ): bool {
+        $sql = "DELETE FROM brinquedo WHERE id_brinquedo = :id";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            ':id' => $id
+        ]);
+    }
+}

@@ -1,35 +1,40 @@
 <?php
 
-    require_once __DIR__ . "/../Models/Setor.php";
+require_once __DIR__ . "/../Models/Setor.php";
+require_once __DIR__ . "/../Core/Auth.php";
 
-    class SetorController{
-        private Setor $setor;
+class SetorController
+{
+    private Setor $setor;
 
-        public function __construct(PDO $pdo) {
-            $this->setor = new Setor($pdo);
-        }
+    public function __construct(PDO $pdo)
+    {
+        $this->setor = new Setor($pdo);
+    }
 
-        public function listar(): void{
-            header('Content-type: application/json; charset=utf-8');
+    public function listar(): void
+    {
+        header('Content-type: application/json; charset=utf-8');
 
-            try {
-                $setores = $this->setor->listar();
+        try {
+            $setores = $this->setor->listar();
 
-                http_response_code(200);
+            http_response_code(200);
 
-                echo json_encode($setores);
-            } catch (PDOException $e) {
+            echo json_encode($setores);
+        } catch (PDOException $e) {
 
-                http_response_code(500);
+            http_response_code(500);
 
-                echo json_encode([
-                    'sucesso' => false,
-                    'mensagem' => 'Erro ao buscar setores'
-                ]);
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'Erro ao buscar setores'
+            ]);
         }
     }
 
-    public function listarParaPagina(): void{
+    public function listarParaPagina(): void
+    {
         Auth::exigirPerfil(Perfil::ADMIN);
 
         $setores = $this->setor->listar();
@@ -37,7 +42,8 @@
         require_once __DIR__ . "/../Views/dashboard/setores/index.php";
     }
 
-    public function criar() : void {
+    public function criar(): void
+    {
         Auth::exigirPerfil(Perfil::ADMIN);
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -54,7 +60,6 @@
         }
 
         try {
-
             $resultado = $this->setor->criar($nome);
 
             if (!$resultado) {
@@ -64,7 +69,6 @@
             }
 
             $_SESSION['sucesso_setor'] = 'Setor cadastrado com sucesso.';
-
         } catch (PDOException $e) {
 
             if ($e->getCode() == 23000) {
@@ -149,4 +153,3 @@
         exit;
     }
 }
-?>

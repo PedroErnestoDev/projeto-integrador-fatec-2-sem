@@ -1,7 +1,7 @@
 <?php
 
 $sidebarProps = [
-    'active' => 'historico',
+    'active' => 'historicos',
 ];
 
 $topbarProps = [

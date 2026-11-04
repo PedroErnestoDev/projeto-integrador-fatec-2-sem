@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/../Models/Ocorrencia.php';
 require_once __DIR__ . '/../Models/Setor.php';
 require_once __DIR__ . '/../Models/Status.php';
@@ -20,7 +21,7 @@ class RelatorioController
         $this->prioridade = new Prioridade($pdo);
     }
 
-    public function ocorrencias()
+    public function ocorrencias(): void
     {
         Auth::exigirPerfil(Perfil::ADMIN);
 

@@ -11,7 +11,6 @@ class DB
     public function conectar(): PDO
     {
         try {
-
             $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->database};charset=utf8mb4";
 
             $pdo = new PDO(
@@ -34,26 +33,19 @@ class DB
             $usuarioLogado = $_SESSION['id_usuario'] ?? null;
 
             if ($usuarioLogado !== null) {
-
                 $pdo->exec(
                     "SET @usuario_logado = " . (int) $usuarioLogado
                 );
-
             } else {
-
                 $pdo->exec(
                     "SET @usuario_logado = NULL"
                 );
             }
 
             return $pdo;
-
         } catch (PDOException $e) {
-
             echo "Erro ao realizar conexão: " . $e->getMessage();
-
             exit;
         }
     }
 }
-?>
