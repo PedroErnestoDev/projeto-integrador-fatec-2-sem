@@ -240,9 +240,9 @@ $active = $sidebarProps['active'] ?? 'dashboard';
             <span>Relatórios</span>
         </a>
 
-        <a href="#" class="nav-link <?= $active === 'configuracoes' ? 'active' : '' ?>">
-            <i class="bi bi-gear"></i>
-            <span>Configurações</span>
+        <a href="/dashboard/historicos" class="nav-link <?= $active === 'historicos' ? 'active' : '' ?>">
+            <i class="bi bi-clock-history"></i>
+            <span>Históricos</span>
         </a>
     </nav>
 </aside>
