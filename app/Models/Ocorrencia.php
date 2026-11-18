@@ -142,7 +142,7 @@ class Ocorrencia
             COUNT(*) AS total
         FROM ocorrencia
         WHERE criado_em >= DATE_FORMAT(
-            DATE_SUB(CURDATE(), INTERVAL 2 MONTH),
+            DATE_SUB(CURDATE(), INTERVAL 12 MONTH),
             '%Y-%m-01'
         )
         GROUP BY DATE_FORMAT(criado_em, '%Y-%m')
