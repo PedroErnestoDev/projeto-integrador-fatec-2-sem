@@ -532,8 +532,6 @@ $topbarProps = [
                 <th>Data/Hora</th>
                 <th>Brinquedo</th>
                 <th>Colaborador</th>
-                <th>Prioridade</th>
-                <th>Status</th>
                 <th>Setor Atual</th>
                 <th class="text-center">Ações</th>
               </tr>
@@ -557,14 +555,6 @@ $topbarProps = [
 
                       <td>
                           <?= htmlspecialchars($ocorrencia['colaborador']) ?>
-                      </td>
-
-                      <td>
-                        <?= htmlspecialchars($ocorrencia['prioridade']) ?>
-                      </td>
-                      
-                      <td>
-                        <?= htmlspecialchars($ocorrencia['status']) ?>
                       </td>
                       
                       <td>

@@ -617,10 +617,24 @@ $topbarProps = [
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">Ordem de Produção (OP)</label>
-                  <input type="text" class="form-control" name="ordem_producao"
-                         value="<?= htmlspecialchars($ocorrencia['ordem_producao']) ?>" required>
-                </div>
+                  <label for="op" class="form-label">
+                      Ordem de Produção (OP) <span class="required">*</span>
+                  </label>
+
+                  <input
+                      type="text"
+                      class="form-control"
+                      id="op"
+                      name="ordem_producao"
+                      placeholder="Digite a OP"
+                      inputmode="numeric"
+                      pattern="[0-9]+"
+                      value="<?= htmlspecialchars($ocorrencia['ordem_producao']) ?>" required>
+                      required
+                  >
+
+                  <div class="form-text">Digite apenas números.</div>
+              </div>
 
                 <div class="col-md-6">
                   <label class="form-label">Usuário responsável</label>
@@ -757,6 +771,13 @@ $topbarProps = [
   <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
 
   <script>
+
+    const campoOP = document.getElementById('op');
+
+    campoOP.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+    
     // Sidebar toggle (igual Dashboard)
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('show');

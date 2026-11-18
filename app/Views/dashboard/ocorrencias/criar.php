@@ -1460,38 +1460,23 @@ $topbarProps = [
                         <!-- OP -->
 
                         <div class="col-md-6">
-
-                            <label
-                                for="ordem_producao"
-                                class="form-label"
-                            >
-
-                                Ordem de Produção (OP)
-
-                                <span class="required">
-                                    *
-                                </span>
-
+                            <label for="op" class="form-label">
+                                Ordem de Produção (OP) <span class="required">*</span>
                             </label>
-
 
                             <input
                                 type="text"
                                 class="form-control"
-                                id="ordem_producao"
+                                id="op"
                                 name="op"
                                 placeholder="Digite a OP"
-                                maxlength="50"
+                                inputmode="numeric"
+                                pattern="[0-9]+"
+                                maxlength="20"
                                 required
                             >
 
-
-                            <div class="form-text">
-
-                                Informe o número da ordem de produção.
-
-                            </div>
-
+                            <div class="form-text">Digite apenas números.</div>
                         </div>
 
                     </div>
@@ -1691,6 +1676,11 @@ $topbarProps = [
 
 <script>
 
+const campoOP = document.getElementById('op');
+
+campoOP.addEventListener('input', function () {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
 
 /* =====================================================
    SIDEBAR

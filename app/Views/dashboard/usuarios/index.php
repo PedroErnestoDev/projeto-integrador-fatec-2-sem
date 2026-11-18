@@ -123,6 +123,21 @@ $topbarProps = [
         <?php require_once __DIR__ . '/../../components/topbar.php'; ?>
 
         <main class="content-area">
+            <?php if (!empty($_SESSION['sucesso_usuario'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?= htmlspecialchars($_SESSION['sucesso_usuario']) ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <?php unset($_SESSION['sucesso_usuario']); ?>
+            <?php endif; ?>
+
+            <?php if (!empty($_SESSION['erro_usuario'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <?= htmlspecialchars($_SESSION['erro_usuario']) ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <?php unset($_SESSION['erro_usuario']); ?>
+            <?php endif; ?>
 
             <div class="table-card">
 
@@ -178,7 +193,7 @@ $topbarProps = [
                                         data-id="<?= htmlspecialchars($usuario['id_usuario'] ?? '') ?>"
                                         data-nome="<?= htmlspecialchars($usuario['nome_usuario'] ?? '') ?>"
                                         data-login="<?= htmlspecialchars($usuario['login_usuario'] ?? '') ?>"
-                                        data-perfil="<?= htmlspecialchars($usuario['id_perfil'] ?? '') ?>"
+                                        data-perfil="<?= htmlspecialchars($usuario['fk_perfil'] ?? '') ?>"
                                     >
 
                                         <td>

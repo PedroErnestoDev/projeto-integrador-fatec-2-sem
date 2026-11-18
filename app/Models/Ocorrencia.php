@@ -57,7 +57,7 @@ class Ocorrencia
                 o.criado_em DESC,
                 o.id_ocorrencia DESC
 
-            LIMIT 5";
+            LIMIT 10";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -326,75 +326,51 @@ class Ocorrencia
         int $prioridade,
         int $status
     ): bool {
-        $sql = "
-                        UPDATE ocorrencia
-                        SET
-                            fk_colaborador = :colaborador,
-                            fk_brinquedo = :brinquedo,
-                            ordem_producao = :ordem_producao,
-                            descricao_ocorrencia = :descricao,
-                            solucao_ocorrencia = :solucao,
-                            fk_prioridade = :prioridade,
-                            fk_status = :status,
-                            data_atualizacao = NOW(),
-                            atualizado_em = NOW()
 
-                        WHERE id_ocorrencia = :id
-                    ";
+        $sql = "
+            UPDATE ocorrencia
+            SET
+                fk_colaborador = :colaborador,
+                fk_brinquedo = :brinquedo,
+                ordem_producao = :ordem_producao,
+                descricao_ocorrencia = :descricao,
+                solucao_ocorrencia = :solucao,
+                fk_prioridade = :prioridade,
+                fk_status = :status,
+
+                data_conclusao = CASE
+                    WHEN :status_data = 3 THEN NOW()
+                    ELSE NULL
+                END,
+
+                data_atualizacao = NOW(),
+                atualizado_em = NOW()
+
+            WHERE id_ocorrencia = :id
+            AND fk_status <> 3
+        ";
 
         $stmt = $this->pdo->prepare($sql);
 
-        $stmt->bindValue(
-            ':id',
-            $id,
-            PDO::PARAM_INT
-        );
-
-        $stmt->bindValue(
-            ':colaborador',
-            $colaborador,
-            PDO::PARAM_INT
-        );
-
-        $stmt->bindValue(
-            ':brinquedo',
-            $brinquedo,
-            PDO::PARAM_INT
-        );
-
-        $stmt->bindValue(
-            ':ordem_producao',
-            $ordemProducao,
-            PDO::PARAM_STR
-        );
-
-        $stmt->bindValue(
-            ':descricao',
-            $descricao,
-            PDO::PARAM_STR
-        );
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':colaborador', $colaborador, PDO::PARAM_INT);
+        $stmt->bindValue(':brinquedo', $brinquedo, PDO::PARAM_INT);
+        $stmt->bindValue(':ordem_producao', $ordemProducao, PDO::PARAM_STR);
+        $stmt->bindValue(':descricao', $descricao, PDO::PARAM_STR);
 
         $stmt->bindValue(
             ':solucao',
             $solucao,
-            $solucao === null
-                ? PDO::PARAM_NULL
-                : PDO::PARAM_STR
+            $solucao === null ? PDO::PARAM_NULL : PDO::PARAM_STR
         );
 
-        $stmt->bindValue(
-            ':prioridade',
-            $prioridade,
-            PDO::PARAM_INT
-        );
+        $stmt->bindValue(':prioridade', $prioridade, PDO::PARAM_INT);
+        $stmt->bindValue(':status', $status, PDO::PARAM_INT);
+        $stmt->bindValue(':status_data', $status, PDO::PARAM_INT);
 
-        $stmt->bindValue(
-            ':status',
-            $status,
-            PDO::PARAM_INT
-        );
+        $stmt->execute();
 
-        return $stmt->execute();
+        return $stmt->rowCount() > 0;
     }
 
     public function deletar(int $id): bool

@@ -411,10 +411,23 @@
           </div>
 
           <div class="col-md-6">
-            <label for="op" class="form-label">Ordem de Produção (OP) <span class="required">*</span></label>
-            <input type="text" class="form-control" id="op" name="op" placeholder="Digite a OP" required>
-            <div class="form-text">Digite a OP</div>
-          </div>
+            <label for="op" class="form-label">
+                Ordem de Produção (OP) <span class="required">*</span>
+            </label>
+
+            <input
+                type="text"
+                class="form-control"
+                id="op"
+                name="op"
+                placeholder="Digite a OP"
+                inputmode="numeric"
+                pattern="[0-9]+"
+                maxlength="20"
+                required
+            >
+
+            <div class="form-text">Digite apenas números.</div>
         </div>
       </div>
 
@@ -451,8 +464,8 @@
       </div>
       <!-- Actions -->
       <div class="form-actions">
-        <button type="button" class="btn btn-cancel" onclick="window.history.back()">
-          <i class="bi bi-x-lg"></i> Cancelar
+        <button type="button" class="btn btn-cancel" onclick="window.location.href='/login'">
+            <i class="bi bi-x-lg"></i> Cancelar
         </button>
         <button type="submit" class="btn btn-submit">
           <i class="bi bi-send"></i> Enviar Ocorrência
@@ -554,6 +567,13 @@
 
     // Se chegou aqui, deixa o formulário ser enviado normalmente
 });
+
+const campoOP = document.getElementById('op');
+
+campoOP.addEventListener('input', function () {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+
 const params = new URLSearchParams(window.location.search);
 
 const sucesso = params.get('sucesso');

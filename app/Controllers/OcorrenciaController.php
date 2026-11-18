@@ -112,17 +112,25 @@ class OcorrenciaController
         Auth::exigirPerfil(Perfil::ADMIN, Perfil::SUPERVISOR);
 
         if ($id <= 0) {
-            http_response_code(400);
-            echo "ID da ocorrência inválido.";
-            return;
+            header('Location: /dashboard/ocorrencias');
+            exit;
         }
 
         $ocorrencia = $this->ocorrencia->buscarPorId($id);
 
         if (!$ocorrencia) {
-            http_response_code(404);
-            echo "Ocorrência não encontrada.";
-            return;
+            header('Location: /dashboard/ocorrencias');
+            exit;
+        }
+
+        // Impede edição de ocorrências concluídas
+        if ((int) $ocorrencia['fk_status'] === 3) {
+            header(
+                'Location: /dashboard/ocorrencias/detalhes/'
+                . $id
+                . '?erro=concluida'
+            );
+            exit;
         }
 
         require_once __DIR__ . "/../Views/dashboard/ocorrencias/editar.php";
