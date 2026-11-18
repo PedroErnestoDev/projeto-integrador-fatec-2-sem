@@ -677,6 +677,27 @@ $topbarProps = [
             z-index: 1035;
         }
 
+        .filter-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 0.85rem;
+            box-shadow: var(--card-shadow);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-card .form-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .filter-card .form-control,
+        .filter-card .form-select {
+            font-size: 0.85rem;
+            border-color: var(--border-color);
+        }
+
         @media (max-width: 991.98px) {
 
             .sidebar {
@@ -747,6 +768,73 @@ $topbarProps = [
         ================================================== -->
 
         <main class="content-area">
+        
+            <div class="filter-card no-print">
+
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="mb-0 fw-semibold">
+                        <i class="bi bi-funnel me-2"></i>
+                        Filtrar ocorrências
+                    </h6>
+                </div>
+
+                <div class="row g-3">
+
+                    <div class="col-md-3">
+                        <label class="form-label">Data inicial</label>
+                        <input type="date" id="dataInicio" class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Data final</label>
+                        <input type="date" id="dataFim" class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label">Status</label>
+                        <select id="filtroStatus" class="form-select form-select-sm">
+                            <option value="">Todos</option>
+                            <option value="aberta">Aberta</option>
+                            <option value="em andamento">Em andamento</option>
+                            <option value="concluída">Concluída</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label">Prioridade</label>
+                        <select id="filtroPrioridade" class="form-select form-select-sm">
+                            <option value="">Todas</option>
+                            <option value="alta">Alta</option>
+                            <option value="média">Média</option>
+                            <option value="baixa">Baixa</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label">Setor</label>
+                        <input type="text" id="filtroSetor"
+                            class="form-control form-control-sm"
+                            placeholder="Nome do setor">
+                    </div>
+
+                    <div class="col-md-12 d-flex gap-2">
+                        <button type="button" id="btnFiltrar"
+                                class="btn btn-primary btn-sm">
+                            <i class="bi bi-funnel me-1"></i>
+                            Filtrar
+                        </button>
+
+                        <button type="button" id="btnLimpar"
+                                class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-x-lg me-1"></i>
+                            Limpar filtros
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+
 
 
             <div class="table-card">
@@ -851,23 +939,22 @@ $topbarProps = [
 
                             <?php if (!empty($ocorrencias)): ?>
 
-                                <?php foreach ($ocorrencias as $ocorrencia): ?>
+                               <?php foreach ($ocorrencias as $ocorrencia): ?>
 
-                                    <tr>
+                                    <tr
+                                        data-status="<?= htmlspecialchars(mb_strtolower($ocorrencia['status'] ?? '')) ?>"
+                                        data-prioridade="<?= htmlspecialchars(mb_strtolower($ocorrencia['prioridade'] ?? '')) ?>"
+                                        data-setor="<?= htmlspecialchars(mb_strtolower($ocorrencia['setor'] ?? '')) ?>"
+                                        data-data="<?= !empty($ocorrencia['data_abertura']) ? date('Y-m-d', strtotime($ocorrencia['data_abertura'])) : '' ?>"
+                                    >
 
                                         <!-- ID -->
-
                                         <td>
-
                                             <strong>
-
-                                                #<?= htmlspecialchars(
-                                                    $ocorrencia['id_ocorrencia']
-                                                ) ?>
-
+                                                #<?= htmlspecialchars($ocorrencia['id_ocorrencia']) ?>
                                             </strong>
-
                                         </td>
+
 
 
                                         <!-- ORDEM PRODUÇÃO -->
@@ -1145,31 +1232,90 @@ $topbarProps = [
         // BUSCA NA TABELA
         // ==========================================
 
-        document
-            .getElementById('searchInput')
-            .addEventListener('keyup', function () {
+       
+        const searchInput = document.getElementById('searchInput');
 
-                const termo =
-                    this.value.toLowerCase();
+        const dataInicio = document.getElementById('dataInicio');
+        const dataFim = document.getElementById('dataFim');
 
-                const linhas =
-                    document.querySelectorAll(
-                        '#ocorrenciasTable tbody tr'
-                    );
+        const filtroStatus = document.getElementById('filtroStatus');
+        const filtroPrioridade = document.getElementById('filtroPrioridade');
+        const filtroSetor = document.getElementById('filtroSetor');
 
-                linhas.forEach(function (linha) {
+        const linhas = document.querySelectorAll(
+            '#ocorrenciasTable tbody tr[data-status]'
+        );
 
-                    const texto =
-                        linha.textContent.toLowerCase();
+        function aplicarFiltros() {
 
-                    linha.style.display =
-                        texto.includes(termo)
-                            ? ''
-                            : 'none';
+            const busca = searchInput.value.toLowerCase().trim();
 
-                });
+            const inicio = dataInicio.value;
+            const fim = dataFim.value;
+
+            const status = filtroStatus.value.toLowerCase();
+            const prioridade = filtroPrioridade.value.toLowerCase();
+            const setor = filtroSetor.value.toLowerCase().trim();
+
+            linhas.forEach(linha => {
+
+                const texto = linha.textContent.toLowerCase();
+
+                const linhaStatus = linha.dataset.status;
+                const linhaPrioridade = linha.dataset.prioridade;
+                const linhaSetor = linha.dataset.setor;
+                const linhaData = linha.dataset.data;
+
+                const correspondeBusca = texto.includes(busca);
+
+                const correspondeStatus =
+                    !status || linhaStatus === status ||
+                    (status === 'concluída' && linhaStatus === 'concluida');
+
+                const correspondePrioridade =
+                    !prioridade ||
+                    linhaPrioridade === prioridade ||
+                    (prioridade === 'média' && linhaPrioridade === 'media');
+
+                const correspondeSetor =
+                    !setor || linhaSetor.includes(setor);
+
+                const correspondeData =
+                    (!inicio || (linhaData && linhaData >= inicio)) &&
+                    (!fim || (linhaData && linhaData <= fim));
+
+                const mostrar =
+                    correspondeBusca &&
+                    correspondeStatus &&
+                    correspondePrioridade &&
+                    correspondeSetor &&
+                    correspondeData;
+
+                linha.style.display = mostrar ? '' : 'none';
 
             });
+
+        }
+
+        searchInput.addEventListener('input', aplicarFiltros);
+
+        document.getElementById('btnFiltrar')
+            .addEventListener('click', aplicarFiltros);
+
+        document.getElementById('btnLimpar')
+            .addEventListener('click', () => {
+
+                searchInput.value = '';
+                dataInicio.value = '';
+                dataFim.value = '';
+                filtroStatus.value = '';
+                filtroPrioridade.value = '';
+                filtroSetor.value = '';
+
+                aplicarFiltros();
+
+            });
+
 
     </script>
 

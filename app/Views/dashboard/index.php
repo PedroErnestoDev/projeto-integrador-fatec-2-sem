@@ -647,77 +647,108 @@ $topbarProps = [
     });
 
     // Bar - Prioridade
-   const ocorrenciasPorMes = <?= json_encode(
+  
+// ======================================================
+// GRÁFICO: OCORRÊNCIAS POR MÊS
+// Exibe sempre os 12 meses do ano
+// ======================================================
+
+const ocorrenciasPorMes = <?= json_encode(
     $ocorrenciasPorMes ?? [],
     JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
 ) ?>;
 
-const mesesNomes = {
-    '01': 'Janeiro',
-    '02': 'Fevereiro',
-    '03': 'Março',
-    '04': 'Abril',
-    '05': 'Maio',
-    '06': 'Junho',
-    '07': 'Julho',
-    '08': 'Agosto',
-    '09': 'Setembro',
-    '10': 'Outubro',
-    '11': 'Novembro',
-    '12': 'Dezembro'
-};
+const meses = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro'
+];
 
-const mesLabels = ocorrenciasPorMes.map(item => {
-    const numeroMes = item.mes.split('-')[1];
-    return mesesNomes[numeroMes];
+// Inicializa todos os meses com zero
+const mesValores = new Array(12).fill(0);
+
+// Preenche os valores retornados pelo banco
+ocorrenciasPorMes.forEach(item => {
+    const numeroMes = Number(item.mes.split('-')[1]);
+
+    if (numeroMes >= 1 && numeroMes <= 12) {
+        mesValores[numeroMes - 1] = Number(item.total);
+    }
 });
 
-const mesValores = ocorrenciasPorMes.map(item => Number(item.total));
-
+// Cria o gráfico
 new Chart(document.getElementById('setorChart'), {
     type: 'bar',
+
     data: {
-        labels: mesLabels,
+        labels: meses,
+
         datasets: [{
             label: 'Ocorrências',
+
             data: mesValores,
+
             backgroundColor: '#3b82f6',
-            borderRadius: 0,
+
+            borderRadius: 4,
             borderSkipped: false,
             barPercentage: 0.70
         }]
     },
+
     options: {
         responsive: true,
         maintainAspectRatio: false,
+
         plugins: {
             legend: {
                 display: false
             },
+
             tooltip: {
                 callbacks: {
                     label: ctx => ` ${ctx.raw} Ocorrências`
                 }
             }
         },
+
         scales: {
             y: {
                 beginAtZero: true,
+
                 grid: {
                     color: '#f1f5f9'
                 },
+
                 ticks: {
-                    stepSize: 10
+                    precision: 0
                 }
             },
+
             x: {
                 grid: {
                     display: false
+                },
+
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 45,
+                    minRotation: 0
                 }
             }
         }
     }
 });
+
     
     new Chart(document.getElementById('brinquedoChart'), {
     type: 'bar',
