@@ -6,7 +6,12 @@ class DB
     private int $port = 3306;
     private string $database = "playpark";
     private string $username = "admin";
-    private string $password = ("8Z5tHHEF2F4TvEgrxdG1Dx0OK") ?: "";
+    private string $password;
+
+    public function __construct()
+    {
+        $this->password = "8Z5tHHEF2F4TvEgrxdG1Dx0OK";
+    }
 
     public function conectar(): PDO
     {
@@ -17,6 +22,9 @@ class DB
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
             ]);
+
+            // Fuso horário de Brasília (UTC-3)
+            $pdo->exec("SET time_zone = '-03:00'");
 
             $usuarioLogado = null;
 

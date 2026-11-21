@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('America/Sao_Paulo');
+
 require_once __DIR__ . '/../app/Config/db.php';
 
 require_once __DIR__ . '/../app/Core/Router.php';
